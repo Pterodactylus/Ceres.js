@@ -5,9 +5,3 @@ version: 2.1
 jobs:
   build:
     - bash build.sh
-
-workflows:
-  version: 2.1
-  build_and_test:
-    jobs:
-      - build
