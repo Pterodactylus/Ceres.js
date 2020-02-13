@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<script src="https://www.desmos.com/api/v1.4/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
+</head>
+<body>
+
+<h2>Quadratic Function</h2>
+<p>This is an example of the solution of the quadratic function using Ceres.js</p>
+
+<div id="calculator" style="width: 600px; height: 400px;"></div>
+<script>
+  var elt = document.getElementById('calculator');
+  var calculator = Desmos.GraphingCalculator(elt);
+  calculator.setExpression({ id: 'exp1', latex: 'x+10*y-20 = 0' });
+  calculator.setExpression({ id: 'exp2', latex: "\\sqrt{5}*x-y^2 = 0" });
+</script>
+
+<p>
+	<textarea id="demo" rows="40" cols="170">
+	</textarea>
+</p>
+
+<script>
+	var Module = {
+		onRuntimeInitialized: function() { //Wait for the script to load
+
+			var fn1 = function f1(x){
+				return (x[0]+10*x[1]-20); //this equation is of the for f1(x) = 0 
+			}
+
+			var fn2 = function f2(x){
+				return (Math.sqrt(5)*x[0]-Math.pow(x[1], 2)); //this equation is of the for f2(x) = 0 
+			}
+
+			let solver = new Ceres() //Create a new Ceres solver instance.
+			solver.add_function(fn1) //Add the first equation to the solver.
+			solver.add_function(fn2) //Add the second equation to the solver.
+			var x_guess = [1,2] //Guess the initial values of the solution.
+			var s = solver.solve(x_guess) //Solve the equation
+			solver.remove() //required to free the memory in C++
+
+			var x = s.x
+			
+			document.getElementById("demo").value = s.report;
+
+		}
+	};
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/build/Ceres.js"></script>
+</body>
+</html>

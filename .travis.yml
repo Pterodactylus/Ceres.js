@@ -1,0 +1,14 @@
+os: linux
+dist: bionic
+addons:
+  apt:
+    packages:
+    - cmake
+    - python
+install: skip
+script:
+# - rm ./build/Ceres.js
+# - touch ./build/Ceres.js
+ - bash build.sh
+after_success:
+ - bash deploy.sh
