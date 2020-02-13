@@ -5,5 +5,5 @@ version: 2.1
 jobs:
   build:
     - run:
-      name: Build Using Emscripten
-      command: cd .
+        name: Build Using Emscripten
+        command: cd .
