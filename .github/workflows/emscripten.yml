@@ -1,0 +1,13 @@
+name: emscripten CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: download
+      run: git clone https://github.com/emscripten-core/emsdk.git
