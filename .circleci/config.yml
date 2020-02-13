@@ -4,4 +4,4 @@ version: 2.1
 
 jobs:
   build:
-    - bash build.sh
+    - cd .
