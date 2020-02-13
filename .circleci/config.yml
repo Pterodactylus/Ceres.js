@@ -7,8 +7,11 @@ jobs:
     - bash build.sh
   test:
   deploy:
-    
+
 workflows:
-  -build
-  -test
-  -deploy
+  version: 2.1
+  build_and_test:
+    jobs:
+      - build
+      - test
+      - deploy
