@@ -5,13 +5,9 @@ version: 2.1
 jobs:
   build:
     - bash build.sh
-  test:
-  deploy:
 
 workflows:
   version: 2.1
   build_and_test:
     jobs:
       - build
-      - test
-      - deploy
