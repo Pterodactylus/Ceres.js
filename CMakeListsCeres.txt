@@ -150,7 +150,7 @@ option(LAPACK "Enable use of LAPACK directly within Ceres." OFF)
 # Template specializations for the Schur complement based solvers. If
 # compile time, binary size or compiler performance is an issue, you
 # may consider disabling this.
-option(SCHUR_SPECIALIZATIONS "Enable fixed-size schur specializations." ON)
+option(SCHUR_SPECIALIZATIONS "Enable fixed-size schur specializations." OFF)
 option(CUSTOM_BLAS
        "Use handcoded BLAS routines (usually faster) instead of Eigen."
        ON)
@@ -158,13 +158,13 @@ option(CUSTOM_BLAS
 # solving the nonlinear least squares problems.
 option(EIGENSPARSE "Enable Eigen as a sparse linear algebra library." ON)
 option(EXPORT_BUILD_DIR
-  "Export build directory using CMake (enables external use without install)." OFF)
+  "Export build directory using CMake (enables external use without install)." ON)
 option(BUILD_TESTING "Enable tests" OFF)
 option(BUILD_DOCUMENTATION "Build User's Guide (html)" OFF)
 option(BUILD_EXAMPLES "Build examples" OFF)
 option(BUILD_BENCHMARKS "Build Ceres benchmarking suite" OFF)
 option(BUILD_SHARED_LIBS "Build Ceres as a shared library." OFF)
-option(PROVIDE_UNINSTALL_TARGET "Add a custom target to ease removal of installed targets" ON)
+option(PROVIDE_UNINSTALL_TARGET "Add a custom target to ease removal of installed targets" OFF)
 option(CODE_GENERATION "Build the code generation module." OFF)
 if(CODE_GENERATION)
     message(WARNING "The code generation module is still under development. The functionality and API of the current implementation might change in the future.")

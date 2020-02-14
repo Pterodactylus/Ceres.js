@@ -1,5 +1,5 @@
 #!/bin/bash
-cwd = $(pwd)
+cwd=$(pwd)
 bdir=$(pwd)/build
 
 echo $bdir
@@ -13,7 +13,7 @@ cd $bdir/emsdk
 git pull
 
 # Download and install the latest SDK tools.
-./emsdk list || ./emsdk install latest
+$bdir/emsdk/upstream/emscripten/em++ -v || ./emsdk install latest
 
 # Make the "latest" SDK "active" for the current user. (writes ~/.emscripten file)
 ./emsdk activate latest
@@ -53,18 +53,17 @@ cd $bdir/buildpkg/ceres-solver
 
 #Turn Minilog On
 #Turn sparse off
-cp $pwd/CMakeListsCeres.txt $bdir/packages/ceres-solver/CMakeLists.txt
+cp --verbose $cwd/CMakeListsCeres.txt $bdir/packages/ceres-solver/CMakeLists.txt
 $bdir/emsdk/upstream/emscripten/emconfigure cmake $bdir/packages/ceres-solver -DCMAKE_INSTALL_PREFIX=$bdir/installpkg -DEigen3_DIR=$bdir/installpkg/share/eigen3/cmake
 make -j4 install
 
 #rm -rf ~/ceres.js-master/build
-mkdir $bdir/build
-cd $bdir/build
-$bdir/emsdk/upstream/emscripten/emconfigure cmake $bdir/ -DCMAKE_INSTALL_PREFIX=$bdir/installpkg
+mkdir $bdir/Ceres.js
+cd $bdir/Ceres.js
+#This line is returning an error due to problems with the ceres solver.
+$bdir/emsdk/upstream/emscripten/emconfigure cmake $cwd/ -DCMAKE_INSTALL_PREFIX=$bdir/installpkg -DEigen3_DIR=$bdir/installpkg/share/eigen3/cmake -DCeres_DIR=$bdir/installpkg/lib/cmake/Ceres
 $bdir/emsdk/upstream/emscripten/emmake make
-
-cd $bdir/
-
+cp --verbose $bdir/Ceres.js/Ceres.js $cwd/Ceres.js
 
 #~/emsdk/upstream/emscripten/emrun --browser "explorer.exe" ~/ceres.js-master/index.html
 #~/emsdk/upstream/emscripten/emrun --browser "explorer.exe" ~/ceres.js-master/test.html
