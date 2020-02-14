@@ -9,5 +9,5 @@ jobs:
         - run:
             name: Build Using Emscripten
             command: |-
-                'cd ..'
-                'bash ./build.sh'
+                cd ../
+                bash ./build.sh
