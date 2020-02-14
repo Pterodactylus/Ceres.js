@@ -7,8 +7,7 @@ jobs:
     machine: true
     steps:
         - run:
-            name: Change Directory
-            command: 'cd ..'
-        - run:
             name: Build Using Emscripten
-            command: 'bash ./build.sh'
+            command: |-
+                'cd ..'
+                'bash ./build.sh'
