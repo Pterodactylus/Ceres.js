@@ -6,4 +6,4 @@ jobs:
   build:
     - run:
         name: Build Using Emscripten
-        command: cd .
+        command: 'cd .'
