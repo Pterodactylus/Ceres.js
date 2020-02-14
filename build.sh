@@ -1,5 +1,5 @@
 #!/bin/bash
-cwd=$(pwd)
+cwd=$CIRCLE_WORKING_DIRECTORY
 
 # Get the emsdk repo
 git clone https://github.com/emscripten-core/emsdk.git

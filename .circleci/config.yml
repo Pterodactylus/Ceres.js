@@ -8,6 +8,8 @@ jobs:
     steps:
         - run:
             name: Build Using Emscripten
-            command: |-
+            command: |
+                ls -r
                 cd ../
+                ls -r
                 bash ./build.sh
