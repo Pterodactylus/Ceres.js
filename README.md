@@ -1,5 +1,6 @@
 # Ceres.js
 Ceres.js is a javascript port of the Ceres solver. Ceres Solver is an open source C++ library ported to javascript with emscripten for modeling and solving large, complicated optimization problems. It can be used to solve Non-linear Least Squares problems with bounds constraints and general unconstrained optimization problems. It is a mature, feature rich, and performant library.
+![Test Image 4](https://travis-ci.com/Pterodactylus/Ceres.js.svg?branch=master)
 
 ## Website
 Visit our website at https://pterodactylus.github.io/Ceres.js/

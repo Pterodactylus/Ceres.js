@@ -9,7 +9,7 @@ install: skip
 script:
  - bash build.sh
 deploy:
-     provider: releases
+     provider: pages
      overwrite: true
      api_key:
          secure: $GITHUB_API_KEY
@@ -18,4 +18,4 @@ deploy:
      skip_cleanup: true
      on:
          repo: Pterodactylus/Ceres.js
-         tags: true
+         tags: false
