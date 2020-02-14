@@ -61,7 +61,7 @@ make -j4 install
 mkdir $bdir/Ceres.js
 cd $bdir/Ceres.js
 #This line is returning an error due to problems with the ceres solver.
-$bdir/emsdk/upstream/emscripten/emconfigure cmake $cwd/ -DCMAKE_INSTALL_PREFIX=$bdir/installpkg -DEigen3_DIR=$bdir/installpkg/share/eigen3/cmake -DCeres_DIR=$bdir/installpkg/lib/cmake/Ceres
+$bdir/emsdk/upstream/emscripten/emconfigure cmake $cwd/ -DCMAKE_INSTALL_PREFIX=$bdir/installpkg
 $bdir/emsdk/upstream/emscripten/emmake make
 cp --verbose $bdir/Ceres.js/Ceres.js $cwd/Ceres.js
 
