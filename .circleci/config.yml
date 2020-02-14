@@ -7,9 +7,8 @@ jobs:
     machine: true
     steps:
         - run:
+            name: List
+            command: ls -r
+        - run:
             name: Build Using Emscripten
-            command: |
-                ls -r
-                cd ../
-                ls -r
-                bash ./build.sh
+            command: bash ${HOME}/${CIRCLE_PROJECT_REPONAME}/build.sh
