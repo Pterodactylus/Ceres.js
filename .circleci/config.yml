@@ -4,6 +4,7 @@ version: 2.1
 
 jobs:
   build:
+    machine: true
     steps:
         - run:
             name: Build Using Emscripten
