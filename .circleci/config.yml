@@ -4,6 +4,7 @@ version: 2.1
 
 jobs:
   build:
-    - run:
-        name: Build Using Emscripten
-        command: 'cd .'
+    steps:
+        - run:
+            name: Build Using Emscripten
+            command: 'cd .'
