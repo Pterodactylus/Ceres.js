@@ -9,7 +9,7 @@ jobs:
     steps:
         - run:
             name: List
-            command: ls -r
+            command: ls
         - run:
             name: Build Using Emscripten
             command: bash ./build.sh
