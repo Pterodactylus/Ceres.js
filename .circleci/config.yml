@@ -4,11 +4,12 @@ version: 2.1
 
 jobs:
   build:
+    working_directory: ${HOME}/${CIRCLE_PROJECT_REPONAME}
     machine: true
     steps:
         - run:
             name: List
-            command: ls -r
+            command: echo ls -r
         - run:
             name: Build Using Emscripten
-            command: bash ${HOME}/${CIRCLE_PROJECT_REPONAME}/build.sh
+            command: echo ./build.sh
