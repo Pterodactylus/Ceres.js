@@ -1,17 +1,19 @@
 #!/bin/bash
-cwd=$(pwd)
+cwd = $(pwd)
+bdir=$(pwd)/build
 
+echo $bdir
 # Get the emsdk repo
-git clone https://github.com/emscripten-core/emsdk.git
+git clone https://github.com/emscripten-core/emsdk.git $bdir/emsdk
 
 # Enter that directory
-cd $cwd/emsdk
+cd $bdir/emsdk
 
 # Fetch the latest version of the emsdk (not needed the first time you clone)
 git pull
 
 # Download and install the latest SDK tools.
-./emsdk install latest
+./emsdk list || ./emsdk install latest
 
 # Make the "latest" SDK "active" for the current user. (writes ~/.emscripten file)
 ./emsdk activate latest
@@ -19,16 +21,16 @@ git pull
 # Activate PATH and other environment variables in the current terminal
 source ./emsdk_env.sh
 
-mkdir $cwd/packages
-cd $cwd/packages
-git clone https://ceres-solver.googlesource.com/ceres-solver
-git clone https://gitlab.com/libeigen/eigen.git
+mkdir $bdir/packages
+cd $bdir/packages
+git clone https://ceres-solver.googlesource.com/ceres-solver $bdir/packages/ceres-solver
+git clone https://gitlab.com/libeigen/eigen.git $bdir/packages/eigen
 
 #rm -rf ~/ceres.js-master/buildpkg
-mkdir $cwd/buildpkg
+mkdir $bdir/buildpkg
 
 #rm -rf ~/ceres.js-master/installpkg
-mkdir $cwd/installpkg
+mkdir $bdir/installpkg
 
 
 #rm -rf ~/ceres.js-master/buildpkg/glog
@@ -39,29 +41,29 @@ mkdir $cwd/installpkg
 #make -j4 install
 
 #rm -rf ~/ceres.js-master/buildpkg/eigen
-mkdir $cwd/buildpkg/eigen
-cd $cwd/buildpkg/eigen
-$cwd/emsdk/upstream/emscripten/emconfigure cmake $cwd/packages/eigen -DCMAKE_INSTALL_PREFIX=$cwd/installpkg
-$cwd/emsdk/upstream/emscripten/emmake make 
+mkdir $bdir/buildpkg/eigen
+cd $bdir/buildpkg/eigen
+$bdir/emsdk/upstream/emscripten/emconfigure cmake $bdir/packages/eigen -DCMAKE_INSTALL_PREFIX=$bdir/installpkg
+$bdir/emsdk/upstream/emscripten/emmake make 
 make -j4 install
 
 #rm -rf ~/ceres.js-master/buildpkg/ceres-solver
-mkdir $cwd/buildpkg/ceres-solver
-cd $cwd/buildpkg/ceres-solver
+mkdir $bdir/buildpkg/ceres-solver
+cd $bdir/buildpkg/ceres-solver
 
 #Turn Minilog On
 #Turn sparse off
-cp $cwd/CMakeListsCeres.txt $cwd/packages/ceres-solver/CMakeLists.txt
-$cwd/emsdk/upstream/emscripten/emconfigure cmake $cwd/packages/ceres-solver -DCMAKE_INSTALL_PREFIX=$cwd/installpkg -DEigen3_DIR=$cwd/installpkg/share/eigen3/cmake
+cp $pwd/CMakeListsCeres.txt $bdir/packages/ceres-solver/CMakeLists.txt
+$bdir/emsdk/upstream/emscripten/emconfigure cmake $bdir/packages/ceres-solver -DCMAKE_INSTALL_PREFIX=$bdir/installpkg -DEigen3_DIR=$bdir/installpkg/share/eigen3/cmake
 make -j4 install
 
 #rm -rf ~/ceres.js-master/build
-mkdir $cwd/build
-cd $cwd/build
-$cwd/emsdk/upstream/emscripten/emconfigure cmake $cwd/ -DCMAKE_INSTALL_PREFIX=$cwd/installpkg
-$cwd/emsdk/upstream/emscripten/emmake make
+mkdir $bdir/build
+cd $bdir/build
+$bdir/emsdk/upstream/emscripten/emconfigure cmake $bdir/ -DCMAKE_INSTALL_PREFIX=$bdir/installpkg
+$bdir/emsdk/upstream/emscripten/emmake make
 
-cd $cwd/
+cd $bdir/
 
 
 #~/emsdk/upstream/emscripten/emrun --browser "explorer.exe" ~/ceres.js-master/index.html
