@@ -4,7 +4,7 @@ version: 2.1
 
 jobs:
   build:
-    working_directory: ${HOME}/${CIRCLE_PROJECT_REPONAME}
+    working_directory: ~/Ceres.js
     machine: true
     steps:
         - run:
