@@ -41,7 +41,7 @@
 			var s = solver.solve(x_guess) //Solve the equation
 			solver.remove() //required to free the memory in C++
 
-			var x = s.x
+			var x = s.x //assign the calculated solution array to the variable x
 			
 			document.getElementById("demo").value = s.report;
 

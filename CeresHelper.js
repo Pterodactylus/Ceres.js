@@ -27,7 +27,7 @@ class Ceres {
 		this.fxnLength = this.fxnLength + 1
 	}
 	// Method
-	solve(xi, length) {
+	solve(xi, max_num_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16) {
 		if(this.length <= this.maxLength ){this.length = this.fxnLength}
 		else{throw "Max number of vars exceeded"}
 		
@@ -35,10 +35,10 @@ class Ceres {
 			this.dataHeap[i] = xi[i];
 		}
 		this.instance.setup_x(this.dataHeap.byteOffset, this.length);
-		var max_num_iterations = 2000
-		var parameter_tolerance = 1e-10;
-		var function_tolerance = 1e-16;
-		var gradient_tolerance = 1e-16;
+		var max_num_iterations = max_num_iterations
+		var parameter_tolerance = parameter_tolerance
+		var function_tolerance = function_tolerance
+		var gradient_tolerance = gradient_tolerance
 		var report = this.instance.solve(max_num_iterations, parameter_tolerance, function_tolerance, gradient_tolerance);
 		//console.log(report)
 		var x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.length)

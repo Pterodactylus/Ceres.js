@@ -34,10 +34,18 @@ var Module = {
 		var s = solver.solve(x_guess) //Solve the equation
 		solver.remove() //required to free the memory in C++
 
-		var x = s.x
+		var x = s.x //assign the calculated solution array to the variable x
 		
 		console.log(s.report);
 
 	}
 };
 ```
+
+## Reference
+The Ceres class can starts an instance of the Ceres solver. It has four methods.
+
+1. The ```javascript Ceres()``` constructor method takes no inputs and creates a new Solver instance.
+2. The ```javascript add_function(fxn_handle)``` method takes a function that has input of an array of number equal in length to the total number of functions. Each of the function should return a residule. The residuals returned should equal zero at the solution point i.e. F(x) = 0.
+3. The ```javascript solve(initial_guesses, max_num_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16)``` function requires an array ```javascript x = [x1_init, x2_init, etc.. ]``` that defines the solver starting point.
+4. The ```javascript remove()``` function clears the memory associated with the problem. Forgetting to call this funtion will result in memory leaks. Once this function is called the Ceres class cannot be used again.
