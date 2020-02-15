@@ -51,7 +51,7 @@ class Ceres {
 		}
 		var end = performance.now();
 		var time = end-start;
-		return { x: normalArray, report: report+txt, time: time}
+		return { x: normalArray, report: report+txt, runtime: time}
 		
 	}
 	remove (){
