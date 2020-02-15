@@ -28,7 +28,6 @@ class Ceres {
 	}
 	// Method
 	solve(xi, max_num_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16) {
-		var start = performance.now();
 		
 		if(this.length <= this.maxLength ){this.length = this.fxnLength}
 		else{throw "Max number of vars exceeded"}
@@ -49,9 +48,7 @@ class Ceres {
 		for(let i=0; i<normalArray.length; i++){
 			txt = txt + "\n" + "x" + i + " = " + normalArray[i]
 		}
-		var end = performance.now();
-		var time = end-start;
-		return { x: normalArray, report: report+txt, runtime: time}
+		return { x: normalArray, report: report+txt}
 		
 	}
 	remove (){
