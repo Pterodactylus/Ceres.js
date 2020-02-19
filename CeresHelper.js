@@ -40,7 +40,9 @@ class Ceres {
 		var parameter_tolerance = parameter_tolerance
 		var function_tolerance = function_tolerance
 		var gradient_tolerance = gradient_tolerance
-		var report = this.instance.solve(max_num_iterations, parameter_tolerance, function_tolerance, gradient_tolerance);
+		var success = this.instance.solve(max_num_iterations, parameter_tolerance, function_tolerance, gradient_tolerance);
+		var report = this.instance.get_report();
+		var message = this.instance.get_message();
 		//console.log(report)
 		var x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.length)
 		var normalArray = [].slice.call(x);
@@ -48,7 +50,7 @@ class Ceres {
 		for(let i=0; i<normalArray.length; i++){
 			txt = txt + "\n" + "x" + i + " = " + normalArray[i]
 		}
-		return { x: normalArray, report: report+txt}
+		return { success: success, message: message, x: normalArray, report: report+txt}
 		
 	}
 	remove (){

@@ -24,6 +24,8 @@ class Ceresjs {
 	//vector<DynamicNumericDiffCostFunction<CostFunctor, CENTRAL>*> functor;
 	int size = 0;
 	Problem problem;
+	std::string report;
+	std::string message;
 	
   public:
     Ceresjs() {
@@ -65,7 +67,7 @@ class Ceresjs {
 		this->xi.push_back (0);
 		size++;
 	}
-	std::string solve(val max_num_iterations, val parameter_tolerance, val function_tolerance, val gradient_tolerance){
+	bool solve(val max_num_iterations, val parameter_tolerance, val function_tolerance, val gradient_tolerance){
 		
 		std::stringstream buffer;
 		std::streambuf * old = std::cout.rdbuf(buffer.rdbuf());
@@ -95,19 +97,27 @@ class Ceresjs {
 		options.minimizer_progress_to_stdout = true;
 		Solver::Summary summary;
 		Solve(options, &this->problem, &summary);
-		//std::cout << summary.BriefReport() << "\n";
+		//std::cout << summary.BriefReport() << "\n"; 
 		
 		for(int i=0; i<this->xArrayLen; i++){
 			this->xArray[i] = x[i];
 		}
 
 		std::string text2 = Errbuffer.str();
-		std::string text = buffer.str();
-		text += summary.FullReport();
+		this->report = buffer.str();
+		this->report += summary.FullReport();
+		this->message = summary.message;
 		
-		return text;
+		return summary.IsSolutionUsable();
+	}
+	std::string get_report(){
+		return this->report;
+	}
+	std::string get_message(){
+		return this->message;
 	}
 };
+
 
 // Binding code
 EMSCRIPTEN_BINDINGS(my_class_example) {
@@ -116,5 +126,7 @@ EMSCRIPTEN_BINDINGS(my_class_example) {
 	.function("setup_x", &Ceresjs::setup_x)
     .function("add_function", &Ceresjs::add_function)
 	.function("solve", &Ceresjs::solve)
+	.function("get_report", &Ceresjs::get_report)
+	.function("get_message", &Ceresjs::get_message)
     ;
 }
