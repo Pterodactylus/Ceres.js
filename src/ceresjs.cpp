@@ -80,9 +80,8 @@ class Ceresjs {
 		this->xi.push_back (0);
 		this->size++;
 	}
-	void add_callback_fxn(val fxn){
-		this->callbackFn.push_back(fxn);
-		std::cout << "print derived class" << std::endl;
+	void add_callback(val fx){
+		this->callbackFn.push_back(fx);
 	}
 	bool solve(val max_num_iterations, val parameter_tolerance, val function_tolerance, val gradient_tolerance){
 		
@@ -150,6 +149,7 @@ EMSCRIPTEN_BINDINGS(my_class_example) {
 	.constructor()
 	.function("setup_x", &Ceresjs::setup_x)
     .function("add_function", &Ceresjs::add_function)
+	.function("add_callback", &Ceresjs::add_callback)
 	.function("solve", &Ceresjs::solve)
 	.function("get_report", &Ceresjs::get_report)
 	.function("get_message", &Ceresjs::get_message)
