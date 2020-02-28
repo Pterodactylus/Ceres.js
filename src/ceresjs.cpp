@@ -71,8 +71,7 @@ class Ceresjs {
 			void PrepareForEvaluation(bool evaluate_jacobians, bool new_evaluation_point){
 				for(int i=0; i<this->f.size(); i++){
 					this->f[i]();
-				}
-				//std::cout << "print derived class" << std::endl; 
+				} 
 			}
 	}; 
 	void add_function(val fn){
@@ -81,8 +80,9 @@ class Ceresjs {
 		this->xi.push_back (0);
 		this->size++;
 	}
-	void add_callback_fxn(val fn){
-		this->callbackFn.push_back(fn);
+	void add_callback_fxn(val fxn){
+		this->callbackFn.push_back(fxn);
+		std::cout << "print derived class" << std::endl;
 	}
 	bool solve(val max_num_iterations, val parameter_tolerance, val function_tolerance, val gradient_tolerance){
 		

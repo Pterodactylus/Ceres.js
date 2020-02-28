@@ -32,7 +32,6 @@ class Ceres {
 			var x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.length);
 			return fn(x);
 		}
-		console.log(this.instance);
 		this.instance.add_callback_fxn(newfunc.bind(this));
 	}
 	// Method
