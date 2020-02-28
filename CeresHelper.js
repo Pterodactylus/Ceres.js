@@ -33,7 +33,7 @@ class Ceres {
 			return fn(x);
 		}
 		console.log(this.instance);
-		this.instance.add_callback(newfunc.bind(this));
+		this.instance.add_callback_fxn(newfunc.bind(this));
 	}
 	// Method
 	solve(xi, max_num_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16) {

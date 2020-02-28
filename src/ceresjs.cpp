@@ -81,7 +81,7 @@ class Ceresjs {
 		this->xi.push_back (0);
 		this->size++;
 	}
-	void add_callback(val fn){
+	void add_callback_fxn(val fn){
 		this->callbackFn.push_back(fn);
 	}
 	bool solve(val max_num_iterations, val parameter_tolerance, val function_tolerance, val gradient_tolerance){
