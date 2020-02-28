@@ -24,13 +24,13 @@ class Ceres {
 			return fn(x)
 		}
 		this.instance.add_function(newfunc.bind(this));
-		this.fxnLength = this.fxnLength + 1
+		this.fxnLength = this.fxnLength + 1;
 	}
 	// Method
 	add_callback(fn) {
 		let newfunc = function f(){
 			var x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.length);
-			return fn(x)
+			return fn(x);
 		}
 		this.instance.add_callback(newfunc.bind(this));
 	}
