@@ -57,7 +57,7 @@ cp --verbose $cwd/CMakeListsCeres.txt $bdir/packages/ceres-solver/CMakeLists.txt
 $bdir/emsdk/upstream/emscripten/emconfigure cmake $bdir/packages/ceres-solver -DCMAKE_INSTALL_PREFIX=$bdir/installpkg -DEigen3_DIR=$bdir/installpkg/share/eigen3/cmake
 make -j4 install
 
-#rm -rf ~/ceres.js-master/build
+#rm -r $bdir/Ceres.js
 mkdir $bdir/Ceres.js
 cd $bdir/Ceres.js
 
