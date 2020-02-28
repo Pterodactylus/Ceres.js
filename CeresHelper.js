@@ -28,9 +28,9 @@ class Ceres {
 	}
 	// Method
 	add_callback(fn) {
-		let newfunc = function f(){
+		let newfunc = function f(evaluate_jacobians, new_evaluation_point){
 			var x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.length);
-			return fn(x);
+			return fn(x, evaluate_jacobians, new_evaluation_point);
 		}
 		this.instance.add_callback(newfunc.bind(this));
 	}

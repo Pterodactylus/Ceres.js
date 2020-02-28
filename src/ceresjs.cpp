@@ -70,7 +70,7 @@ class Ceresjs {
 			}
 			void PrepareForEvaluation(bool evaluate_jacobians, bool new_evaluation_point){
 				for(int i=0; i<this->f.size(); i++){
-					this->f[i]();
+					this->f[i](evaluate_jacobians, new_evaluation_point);
 				} 
 			}
 	}; 
