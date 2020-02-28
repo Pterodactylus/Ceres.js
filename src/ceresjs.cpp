@@ -23,7 +23,7 @@ class Ceresjs {
 	//vector<CostFunction*> functor;
 	//vector<DynamicNumericDiffCostFunction<CostFunctor, CENTRAL>*> functor;
 	int size = 0;
-	Problem problem;
+	std::vector<val> callbackFn;
 	std::string report;
 	std::string message;
 	
@@ -61,11 +61,28 @@ class Ceresjs {
 				return true;
 			}
 	};
+	class CallbackFxn : public ceres::EvaluationCallback {
+		std::vector<val> f;
+		
+		public:
+			CallbackFxn(std::vector<val> fn){
+				this->f = fn;
+			}
+			void PrepareForEvaluation(bool evaluate_jacobians, bool new_evaluation_point){
+				for(int i=0; i<this->f.size(); i++){
+					this->f[i]();
+				}
+				//std::cout << "print derived class" << std::endl; 
+			}
+	}; 
 	void add_function(val fn){
 		this->f.push_back (fn);
 		this->x.push_back (0);
 		this->xi.push_back (0);
-		size++;
+		this->size++;
+	}
+	void add_callback(val fn){
+		this->callbackFn.push_back (fn);
 	}
 	bool solve(val max_num_iterations, val parameter_tolerance, val function_tolerance, val gradient_tolerance){
 		
@@ -83,20 +100,28 @@ class Ceresjs {
 			x[i] = this->xArray[i];
 		}
 		
-		CostFunctor* cfunctor = new CostFunctor(this->f, this->xArray, this->xArrayLen);
-		DynamicNumericDiffCostFunction<CostFunctor, CENTRAL>* functor = new DynamicNumericDiffCostFunction<CostFunctor, CENTRAL> (cfunctor);
-		functor->AddParameterBlock(this->size);
-		functor->SetNumResiduals(this->size);
-		this->problem.AddResidualBlock(functor, NULL, x);
-		
 		Solver::Options options;
 		options.parameter_tolerance = parameter_tolerance.as<double>();
 		options.function_tolerance = function_tolerance.as<double>();
 		options.gradient_tolerance = gradient_tolerance.as<double>();
 		options.max_num_iterations = max_num_iterations.as<double>();
 		options.minimizer_progress_to_stdout = true;
+		
+		options.update_state_every_iteration = true;
+		CallbackFxn* callback = new CallbackFxn(this->callbackFn);
+		Problem::Options poptions;
+		poptions.evaluation_callback = callback;
+		
+		Problem problem = Problem(poptions);
+		
+		CostFunctor* cfunctor = new CostFunctor(this->f, this->xArray, this->xArrayLen);
+		DynamicNumericDiffCostFunction<CostFunctor, CENTRAL>* functor = new DynamicNumericDiffCostFunction<CostFunctor, CENTRAL> (cfunctor);
+		functor->AddParameterBlock(this->size);
+		functor->SetNumResiduals(this->size);
+		problem.AddResidualBlock(functor, NULL, x);
+		
 		Solver::Summary summary;
-		Solve(options, &this->problem, &summary);
+		Solve(options, &problem, &summary);
 		//std::cout << summary.BriefReport() << "\n"; 
 		
 		for(int i=0; i<this->xArrayLen; i++){

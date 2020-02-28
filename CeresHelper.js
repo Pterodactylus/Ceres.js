@@ -27,6 +27,14 @@ class Ceres {
 		this.fxnLength = this.fxnLength + 1
 	}
 	// Method
+	add_callback(fn) {
+		let newfunc = function f(){
+			var x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.length);
+			return fn(x)
+		}
+		this.instance.add_callback(newfunc.bind(this));
+	}
+	// Method
 	solve(xi, max_num_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16) {
 		
 		if(this.length <= this.maxLength ){this.length = this.fxnLength}
