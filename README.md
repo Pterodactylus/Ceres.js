@@ -10,7 +10,7 @@ Visit our website at https://pterodactylus.github.io/Ceres.js/
 You can install Ceres.js by including the Ceres.js file in your HTML or js code.
 
 ```HTML
-<script src="https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/Ceres-v1.3.0.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/Ceres-v1.3.1.js"></script>
 ```
 
 ## Basic Example

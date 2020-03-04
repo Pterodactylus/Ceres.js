@@ -132,11 +132,12 @@ class Ceresjs {
 		problem.AddResidualBlock(functor, NULL, x);
 		
 		for(int i=0; i<this->lowerbound.size(); i++){
-			problem.SetParameterLowerBound(&x[this->lowerbound[i]], this->lowerbound[i], this->lowerboundValue[i]);
+			//problem.SetParameterLowerBound(&x[this->lowerbound[i]], this->lowerbound[i], this->lowerboundValue[i]);
+			problem.SetParameterLowerBound(x, this->lowerbound[i], this->lowerboundValue[i]);
 		}
 		
 		for(int i=0; i<this->upperbound.size(); i++){
-			problem.SetParameterUpperBound(&x[this->upperbound[i]], this->upperbound[i], this->upperboundValue[i]);
+			problem.SetParameterUpperBound(x, this->upperbound[i], this->upperboundValue[i]);
 		}
 		
 		Solver::Summary summary;
