@@ -10,7 +10,7 @@ Visit our website at https://pterodactylus.github.io/Ceres.js/
 You can install Ceres.js by including the Ceres.js file in your HTML or js code.
 
 ```HTML
-<script src="https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/Ceres-v1.1.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/Ceres-v1.3.0.js"></script>
 ```
 
 ## Basic Example
@@ -27,17 +27,23 @@ var Module = {
 		var fn2 = function f2(x){
 			return (Math.sqrt(5)*x[0]-Math.pow(x[1], 2)); //this equation is of the form f2(x) = 0 
 		}
+		var c1 = function callback1(x, evaluate_jacobians, new_evaluation_point){
+				console.log(x);
+		}
 
 		let solver = new Ceres() //Create a new Ceres solver instance.
 		solver.add_function(fn1) //Add the first equation to the solver.
 		solver.add_function(fn2) //Add the second equation to the solver.
+		solver.add_lowerbound(0,-10) //Add a lower bound to the x[0] variable
+		solver.add_upperbound(1,100) //Add a upper bound to the x[1] variable
+		solver.add_callback(c1) //Add the callback to the solver.
 		var x_guess = [1,2] //Guess the initial values of the solution.
 		var s = solver.solve(x_guess) //Solve the equation
-		solver.remove() //required to free the memory in C++
 
 		var x = s.x //assign the calculated solution array to the variable x
 		
 		console.log(s.report);
+		solver.remove() //required to free the memory in C++
 
 	}
 };

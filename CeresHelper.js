@@ -18,13 +18,21 @@ class Ceres {
 	  
 	}
 	// Method
-	add_function(fn) {
+	add_function(fn, upperBound = null, lowerBound = null) {
 		let newfunc = function f(){
 			var x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.length);
 			return fn(x)
 		}
 		this.instance.add_function(newfunc.bind(this));
 		this.fxnLength = this.fxnLength + 1;
+	}
+	// Method
+	add_lowerbound(xNumber, lowerBound) {
+		if(isFinite(lowerBound)){this.instance.add_lowerbound(xNumber, lowerBound);}
+	}
+	// Method
+	add_upperbound(xNumber, upperBound) {
+		if(isFinite(upperBound)){this.instance.add_upperbound(xNumber, upperBound);}
 	}
 	// Method
 	add_callback(fn) {
@@ -34,6 +42,7 @@ class Ceres {
 		}
 		this.instance.add_callback(newfunc.bind(this));
 	}
+	
 	// Method
 	solve(xi, max_num_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16) {
 		
