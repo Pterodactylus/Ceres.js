@@ -1,10 +1,6 @@
 class Ceres {
 	constructor() {
-		function nm(){
-			return Ceresjs();
-		}
-		this.instance = nm()
-		//this.instance = nm()return Module.Ceresjs();
+		this.instance = new Module.Ceresjs();
 		
 		// Create example data to test float_multiply_array
 		this.fxnLength = 0
