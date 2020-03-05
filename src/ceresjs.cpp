@@ -12,7 +12,6 @@ using ceres::Solve;
 using namespace emscripten;
 typedef double (*func_t)(double const* const* );
 
-
 class Ceresjs {
 	std::vector<double> x;
 	std::vector<double> xi;

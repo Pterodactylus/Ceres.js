@@ -1,4 +1,5 @@
 #!/bin/bash
+#cd ~/Ceres.js
 cwd=$(pwd)
 bdir=$(pwd)/build
 
