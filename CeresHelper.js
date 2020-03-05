@@ -1,7 +1,7 @@
 class Ceres {
 	constructor() {
 		function nm(){
-			return Ceres();
+			return Ceresjs();
 		}
 		this.instance = nm()
 		//this.instance = nm()return Module.Ceresjs();
