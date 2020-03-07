@@ -76,7 +76,7 @@ class Ceres {
 }
 
 
-
+Module.Ceres = new Ceres(Module);
 
 
 
