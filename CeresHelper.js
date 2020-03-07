@@ -1,24 +1,35 @@
-class Ceres {
-	constructor(Module) {
-		this.instance = new Module.Ceresjs();
-		
-		// Create example data to test float_multiply_array
-		this.fxnLength = 0
-		this.length = 0
-		this.maxLength = 1000
-		this.data = new Float64Array(this.maxLength);
 
-		// Get data byte size, allocate memory on Emscripten heap, and get pointer
-		let nDataBytes = this.data.length * this.data.BYTES_PER_ELEMENT;
-		let dataPtr = Module._malloc(nDataBytes);
 
-		// Copy data to Emscripten heap (directly accessed from Module.HEAPU8)
-		this.dataHeap = new Float64Array(Module.HEAPF64.buffer, dataPtr, nDataBytes);
-		this.dataHeap.set(new Float64Array(this.data.buffer));
-	  
+//Ceres Helper JS
+
+export class Ceres {
+	constructor() {
+		this.loaded = new Promise(function(resolve,reject){
+			CeresModule().then(function(Module){
+				
+				this.instance = new Module.Ceresjs
+				
+				// Create example data to test float_multiply_array
+				this.fxnLength = 0
+				this.length = 0
+				this.maxLength = 1000
+				this.data = new Float64Array(this.maxLength);
+
+				// Get data byte size, allocate memory on Emscripten heap, and get pointer
+				let nDataBytes = this.data.length * this.data.BYTES_PER_ELEMENT;
+				let dataPtr = Module._malloc(nDataBytes);
+
+				// Copy data to Emscripten heap (directly accessed from Module.HEAPU8)
+				this.dataHeap = new Float64Array(Module.HEAPF64.buffer, dataPtr, nDataBytes);
+				this.dataHeap.set(new Float64Array(this.data.buffer));
+				
+				resolve()
+			}.bind(this))
+		}.bind(this))
 	}
 	// Method
-	add_function(fn, upperBound = null, lowerBound = null) {
+	async add_function(fn, upperBound = null, lowerBound = null) {
+		await this.loaded
 		let newfunc = function f(){
 			let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.length);
 			return fn(x)
@@ -27,15 +38,18 @@ class Ceres {
 		this.fxnLength = this.fxnLength + 1;
 	}
 	// Method
-	add_lowerbound(xNumber, lowerBound) {
+	async add_lowerbound(xNumber, lowerBound) {
+		await this.loaded
 		this.instance.add_lowerbound(xNumber, lowerBound);
 	}
 	// Method
-	add_upperbound(xNumber, upperBound) {
+	async add_upperbound(xNumber, upperBound) {
+		await this.loaded
 		this.instance.add_upperbound(xNumber, upperBound);
 	}
 	// Method
-	add_callback(fn) {
+	async add_callback(fn) {
+		await this.loaded
 		let newfunc = function f(evaluate_jacobians, new_evaluation_point){
 			let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.length);
 			return fn(x, evaluate_jacobians, new_evaluation_point);
@@ -44,8 +58,8 @@ class Ceres {
 	}
 	
 	// Method
-	solve(xi, max_numb_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16) {
-		
+	async solve(xi, max_numb_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16) {
+		await this.loaded
 		if(this.length <= this.maxLength ){this.length = this.fxnLength}
 		else{throw "Max number of vars exceeded"}
 		
@@ -70,13 +84,11 @@ class Ceres {
 		return { success: success, message: message, x: normalArray, report: report+txt}
 		
 	}
-	remove (){
+	async remove (){
+		await this.loaded
 		this.instance.delete();
 	}
 }
-
-
-Module['Ceresjs'] = new Ceres(Module);
 
 
 

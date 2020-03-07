@@ -12,7 +12,11 @@ cd $bdir/Ceres.js
 sed -i 's/include(CeresCodeGeneration)/# include(CeresCodeGeneration)/' $bdir/installpkg/lib/cmake/Ceres/CeresConfig.cmake
 $bdir/emsdk/upstream/emscripten/emconfigure cmake $cwd/ -DCMAKE_INSTALL_PREFIX=$bdir/installpkg
 $bdir/emsdk/upstream/emscripten/emmake make
-cp --verbose $bdir/Ceres.js/Ceres.js $cwd/Ceres-v1.3.16.js
+cat $cwd/CeresHelper.js >> $bdir/Ceres.js/Ceres.js
+
+cp --verbose $bdir/Ceres.js/Ceres.js $cwd/Ceres-v1.3.17.js
+#cp --verbose $bdir/Ceres.js/Ceres.wasm.map $cwd/Ceres.wasm.map
+
 
 #~/emsdk/upstream/emscripten/emrun --browser "explorer.exe" ~/ceres.js-master/index.html
-$bdir/emsdk/upstream/emscripten/emrun --browser "explorer.exe" $cwd/docs/composite.html
+#$bdir/emsdk/upstream/emscripten/emrun --browser "explorer.exe" $cwd/docs/composite.html
