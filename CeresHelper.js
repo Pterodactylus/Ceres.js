@@ -1,5 +1,5 @@
 class Ceres {
-	constructor() {
+	constructor(Module) {
 		this.instance = new Module.Ceresjs();
 		
 		// Create example data to test float_multiply_array
@@ -76,7 +76,7 @@ class Ceres {
 }
 
 
-Module.Ceres = new Ceres(Module);
+Module['Ceresjs'] = new Ceres(Module);
 
 
 
