@@ -4,6 +4,7 @@
 
 export class Ceres {
 	constructor() {
+		this.asyncFunctions = []
 		this.loaded = new Promise(function(resolve,reject){
 			CeresModule().then(function(Module){
 				
@@ -29,37 +30,53 @@ export class Ceres {
 	}
 	// Method
 	async add_function(fn, upperBound = null, lowerBound = null) {
-		await this.loaded
-		let newfunc = function f(){
-			let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.length);
-			return fn(x)
-		}
-		this.instance.add_function(newfunc.bind(this));
-		this.fxnLength = this.fxnLength + 1;
+		this.asyncFunctions.push(new Promise(function(resolve,reject){
+			await this.loaded
+			let newfunc = function f(){
+				let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.length);
+				return fn(x)
+			}
+			this.instance.add_function(newfunc.bind(this));
+			this.fxnLength = this.fxnLength + 1;
+			resolve()
+		}.bind(this)))
 	}
 	// Method
 	async add_lowerbound(xNumber, lowerBound) {
-		await this.loaded
-		this.instance.add_lowerbound(xNumber, lowerBound);
+		this.asyncFunctions.push(new Promise(function(resolve,reject){
+			await this.loaded
+			this.instance.add_lowerbound(xNumber, lowerBound);
+			resolve()
+		}.bind(this)))
 	}
 	// Method
 	async add_upperbound(xNumber, upperBound) {
-		await this.loaded
-		this.instance.add_upperbound(xNumber, upperBound);
+		this.asyncFunctions.push(new Promise(function(resolve,reject){
+			await this.loaded
+			this.instance.add_upperbound(xNumber, upperBound);
+			resolve()
+		}.bind(this)))
 	}
 	// Method
 	async add_callback(fn) {
-		await this.loaded
-		let newfunc = function f(evaluate_jacobians, new_evaluation_point){
-			let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.length);
-			return fn(x, evaluate_jacobians, new_evaluation_point);
-		}
-		this.instance.add_callback(newfunc.bind(this));
+		this.asyncFunctions.push(new Promise(function(resolve,reject){
+			await this.loaded
+			let newfunc = function f(evaluate_jacobians, new_evaluation_point){
+				let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.length);
+				return fn(x, evaluate_jacobians, new_evaluation_point);
+			}
+			this.instance.add_callback(newfunc.bind(this));
+			resolve()
+		}.bind(this)))
 	}
 	
 	// Method
 	async solve(xi, max_numb_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16) {
 		await this.loaded
+		for (var i = 0; i < this.asyncFunctions.length; i++) {
+			var result = await this.asyncFunctions[i];
+			//console.log(result);
+		}
 		if(this.length <= this.maxLength ){this.length = this.fxnLength}
 		else{throw "Max number of vars exceeded"}
 		
