@@ -1,7 +1,7 @@
 
 var CeresModule = (function() {
-  var _scriptDir = typeof document !== 'undefined' && document.currentScript ? document.currentScript.src : undefined;
-  if (typeof __filename !== 'undefined') _scriptDir = _scriptDir || __filename;
+  var _scriptDir = import.meta.url;
+  
   return (
 function(CeresModule) {
   CeresModule = CeresModule || {};
@@ -7794,10 +7794,4 @@ Module['Ceresjs'] = new Ceres(Module);
 }
 );
 })();
-if (typeof exports === 'object' && typeof module === 'object')
-      module.exports = CeresModule;
-    else if (typeof define === 'function' && define['amd'])
-      define([], function() { return CeresModule; });
-    else if (typeof exports === 'object')
-      exports["CeresModule"] = CeresModule;
-    
+export default CeresModule;
