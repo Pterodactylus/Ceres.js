@@ -30,7 +30,7 @@ export class Ceres {
 	}
 	// Method
 	async add_function(fn, upperBound = null, lowerBound = null) {
-		this.asyncFunctions.push(new Promise(function(resolve,reject){
+		this.asyncFunctions.push(new Promise(async function(resolve,reject){
 			await this.loaded
 			let newfunc = function f(){
 				let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.length);
@@ -43,7 +43,7 @@ export class Ceres {
 	}
 	// Method
 	async add_lowerbound(xNumber, lowerBound) {
-		this.asyncFunctions.push(new Promise(function(resolve,reject){
+		this.asyncFunctions.push(new Promise(async function(resolve,reject){
 			await this.loaded
 			this.instance.add_lowerbound(xNumber, lowerBound);
 			resolve()
@@ -51,7 +51,7 @@ export class Ceres {
 	}
 	// Method
 	async add_upperbound(xNumber, upperBound) {
-		this.asyncFunctions.push(new Promise(function(resolve,reject){
+		this.asyncFunctions.push(new Promise(async function(resolve,reject){
 			await this.loaded
 			this.instance.add_upperbound(xNumber, upperBound);
 			resolve()
@@ -59,7 +59,7 @@ export class Ceres {
 	}
 	// Method
 	async add_callback(fn) {
-		this.asyncFunctions.push(new Promise(function(resolve,reject){
+		this.asyncFunctions.push(new Promise(async function(resolve,reject){
 			await this.loaded
 			let newfunc = function f(evaluate_jacobians, new_evaluation_point){
 				let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.length);
