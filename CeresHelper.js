@@ -4,106 +4,104 @@
 
 export class Ceres {
 	constructor() {
-		this.asyncFunctions = []
-		this.loaded = new Promise(function(resolve,reject){
-			CeresModule().then(function(Module){
-				
-				this.instance = new Module.Ceresjs
-				
-				// Create example data to test float_multiply_array
-				this.fxnLength = 0
-				this.length = 0
-				this.maxLength = 1000
-				this.data = new Float64Array(this.maxLength);
+		this.loaded = false
+		this.fxn = []
+		this.lowerbound = []
+		this.upperbound = []
+		this.callback = []
+		
+		CeresModule().then(function(Module){
+			
+			this.instance = new Module.Ceresjs
+			
+			// Create example data to test float_multiply_array
+			this.fxnLength = 0
+			this.length = 0
+			this.maxLength = 1000
+			this.data = new Float64Array(this.maxLength);
 
-				// Get data byte size, allocate memory on Emscripten heap, and get pointer
-				let nDataBytes = this.data.length * this.data.BYTES_PER_ELEMENT;
-				let dataPtr = Module._malloc(nDataBytes);
+			// Get data byte size, allocate memory on Emscripten heap, and get pointer
+			let nDataBytes = this.data.length * this.data.BYTES_PER_ELEMENT;
+			let dataPtr = Module._malloc(nDataBytes);
 
-				// Copy data to Emscripten heap (directly accessed from Module.HEAPU8)
-				this.dataHeap = new Float64Array(Module.HEAPF64.buffer, dataPtr, nDataBytes);
-				this.dataHeap.set(new Float64Array(this.data.buffer));
-				
-				resolve()
-			}.bind(this))
+			// Copy data to Emscripten heap (directly accessed from Module.HEAPU8)
+			this.dataHeap = new Float64Array(Module.HEAPF64.buffer, dataPtr, nDataBytes);
+			this.dataHeap.set(new Float64Array(this.data.buffer));
+			this.loaded = true
 		}.bind(this))
 	}
 	// Method
-	async add_function(fn, upperBound = null, lowerBound = null) {
-		this.asyncFunctions.push(new Promise(async function(resolve,reject){
-			await this.loaded
+	add_function(fn) {
+		this.fxn.push(fn)
+		this.fxnLength = this.fxnLength + 1;
+	}
+	// Method
+	add_lowerbound(xNumber, lowerBound) {
+		this.lowerbound.push([xNumber, lowerBound])
+	}
+	// Method
+	add_upperbound(xNumber, upperBound) {
+		this.upperbound.push([xNumber, upperBound])
+	}
+	// Method
+	add_callback(fn) {
+		this.callback.push(fn)
+	}
+	//Method
+	load_fxns(){
+		for(let i = 0; i < this.fxn.length; i++){
 			let newfunc = function f(){
 				let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.length);
-				return fn(x)
+				return this.fxn[i](x)
 			}
 			this.instance.add_function(newfunc.bind(this));
-			this.fxnLength = this.fxnLength + 1;
-			resolve()
-		}.bind(this)))
-	}
-	// Method
-	async add_lowerbound(xNumber, lowerBound) {
-		this.asyncFunctions.push(new Promise(async function(resolve,reject){
-			await this.loaded
-			this.instance.add_lowerbound(xNumber, lowerBound);
-			resolve()
-		}.bind(this)))
-	}
-	// Method
-	async add_upperbound(xNumber, upperBound) {
-		this.asyncFunctions.push(new Promise(async function(resolve,reject){
-			await this.loaded
-			this.instance.add_upperbound(xNumber, upperBound);
-			resolve()
-		}.bind(this)))
-	}
-	// Method
-	async add_callback(fn) {
-		this.asyncFunctions.push(new Promise(async function(resolve,reject){
-			await this.loaded
+		}
+		for(let i = 0; i < this.lowerbound.length; i++){
+			this.instance.add_lowerbound(this.lowerbound[i][0], this.lowerbound[i][1]);
+		}
+		for(let i = 0; i < this.upperbound.length; i++){
+			this.instance.add_upperbound(this.upperbound[i][0], this.upperbound[i][1]);
+		}
+		for(let i = 0; i < this.callback.length; i++){
 			let newfunc = function f(evaluate_jacobians, new_evaluation_point){
 				let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.length);
-				return fn(x, evaluate_jacobians, new_evaluation_point);
+				return this.callback[i](x, evaluate_jacobians, new_evaluation_point);
 			}
 			this.instance.add_callback(newfunc.bind(this));
-			resolve()
-		}.bind(this)))
+		}
 	}
-	
 	// Method
-	async solve(xi, max_numb_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16) {
-		await this.loaded
-		for (var i = 0; i < this.asyncFunctions.length; i++) {
-			var result = await this.asyncFunctions[i];
-			//console.log(result);
+	solve(xi, max_numb_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16) {
+		if(this.loaded == true){
+			this.load_fxns()
+			if(this.length <= this.maxLength ){this.length = this.fxnLength}
+			else{throw "Max number of vars exceeded"}
+			
+			for(let i = 0; i < xi.length; i++){
+				this.dataHeap[i] = xi[i];
+			}
+			this.instance.setup_x(this.dataHeap.byteOffset, this.length);
+			let max_num_iterations = max_numb_iterations
+			let parameter_tol = parameter_tolerance
+			let function_tol = function_tolerance
+			let gradient_tol = gradient_tolerance
+			let success = this.instance.solve(max_num_iterations, parameter_tol, function_tol, gradient_tol);
+			let report = this.instance.get_report();
+			let message = this.instance.get_message();
+			//console.log(report)
+			let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.length)
+			let normalArray = [].slice.call(x);
+			let txt = "";
+			for(let i=0; i<normalArray.length; i++){
+				txt = txt + "\n" + "x" + i + " = " + normalArray[i]
+			}
+			this.instance.delete();
+			return { success: success, message: message, x: normalArray, report: report+txt}
 		}
-		if(this.length <= this.maxLength ){this.length = this.fxnLength}
-		else{throw "Max number of vars exceeded"}
+		else{
+			console.log("Warning the Ceres.js wasm has not been loaded yet.")
+		}
 		
-		for(let i = 0; i < xi.length; i++){
-			this.dataHeap[i] = xi[i];
-		}
-		this.instance.setup_x(this.dataHeap.byteOffset, this.length);
-		let max_num_iterations = max_numb_iterations
-		let parameter_tol = parameter_tolerance
-		let function_tol = function_tolerance
-		let gradient_tol = gradient_tolerance
-		let success = this.instance.solve(max_num_iterations, parameter_tol, function_tol, gradient_tol);
-		let report = this.instance.get_report();
-		let message = this.instance.get_message();
-		//console.log(report)
-		let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.length)
-		let normalArray = [].slice.call(x);
-		let txt = "";
-		for(let i=0; i<normalArray.length; i++){
-			txt = txt + "\n" + "x" + i + " = " + normalArray[i]
-		}
-		return { success: success, message: message, x: normalArray, report: report+txt}
-		
-	}
-	async remove (){
-		await this.loaded
-		this.instance.delete();
 	}
 }
 
