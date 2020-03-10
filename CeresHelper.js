@@ -28,7 +28,11 @@ export class Ceres {
 			this.dataHeap = new Float64Array(Module.HEAPF64.buffer, dataPtr, nDataBytes);
 			this.dataHeap.set(new Float64Array(this.data.buffer));
 			this.loaded = true
+			this.then()
 		}.bind(this))
+	}
+	then(fxnCall){
+		fxnCall();
 	}
 	// Method
 	add_function(fn) {
