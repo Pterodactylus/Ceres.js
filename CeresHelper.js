@@ -3,7 +3,7 @@
 //Ceres Helper JS
 
 export class Ceres {
-	constructor() {
+	constructor(loadedFxn) {
 		this.loaded = false
 		this.fxn = []
 		this.lowerbound = []
@@ -28,11 +28,8 @@ export class Ceres {
 			this.dataHeap = new Float64Array(Module.HEAPF64.buffer, dataPtr, nDataBytes);
 			this.dataHeap.set(new Float64Array(this.data.buffer));
 			this.loaded = true
-			this.then()
+			loadedFxn();
 		}.bind(this))
-	}
-	then(fxnCall){
-		fxnCall();
 	}
 	// Method
 	add_function(fn) {
