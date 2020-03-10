@@ -94,6 +94,17 @@ class Ceresjs {
 		this->upperbound.push_back(index);
 		this->upperboundValue.push_back(value);
 	}
+	void reset(){
+		this->f.clear();
+		this->x.clear();
+		this->xi.clear();
+		this->size = 0;
+		this->callbackFn.clear();
+		this->lowerbound.clear();
+		this->lowerboundValue.clear();
+		this->upperbound.clear();
+		this->upperboundValue.clear();
+	}
 	bool solve(val max_num_iterations, val parameter_tolerance, val function_tolerance, val gradient_tolerance){
 		
 		std::stringstream buffer;
@@ -172,6 +183,7 @@ EMSCRIPTEN_BINDINGS(my_class_example) {
 	.function("add_callback", &Ceresjs::add_callback)
 	.function("add_upperbound", &Ceresjs::add_upperbound)
 	.function("add_lowerbound", &Ceresjs::add_lowerbound)
+	.function("reset", &Ceresjs::reset)
 	.function("solve", &Ceresjs::solve)
 	.function("get_report", &Ceresjs::get_report)
 	.function("get_message", &Ceresjs::get_message)

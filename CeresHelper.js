@@ -47,6 +47,14 @@ export class Ceres {
 	add_callback(fn) {
 		this.callback.push(fn)
 	}
+	reset(){
+		this.instance.reset();
+		this.fxn = []
+		this.lowerbound = []
+		this.upperbound = []
+		this.callback = []
+		
+	}
 	//Method
 	load_fxns(){
 		for(let i = 0; i < this.fxn.length; i++){
