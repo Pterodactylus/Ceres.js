@@ -113,6 +113,7 @@ export class Ceres {
 		
 	}
 	remove(){
+		this.loaded == false;
 		this.instance.delete();
 	}
 }
