@@ -82,9 +82,10 @@ export class Ceres {
 	// Method
 	solve(xi, max_numb_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16) {
 		if(this.loaded == true){
-			this.load_fxns()
 			if(this.length <= this.maxLength ){this.length = this.fxnLength}
 			else{throw "Max number of vars exceeded"}
+			
+			this.load_fxns()
 			
 			for(let i = 0; i < xi.length; i++){
 				this.dataHeap[i] = xi[i];
@@ -104,13 +105,16 @@ export class Ceres {
 			for(let i=0; i<normalArray.length; i++){
 				txt = txt + "\n" + "x" + i + " = " + normalArray[i]
 			}
-			this.instance.delete();
+			
 			return { success: success, message: message, x: normalArray, report: report+txt}
 		}
 		else{
 			console.log("Warning the Ceres.js wasm has not been loaded yet.")
 		}
 		
+	}
+	remove(){
+		this.instance.delete();
 	}
 }
 
