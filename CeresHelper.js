@@ -28,7 +28,7 @@ export class Ceres {
 				this.dataHeap.set(new Float64Array(this.data.buffer));
 				this.loaded = true
 				resolve()
-			}.bind(this)
+			}.bind(this))
 		}.bind(this))
 	}
 	// Method
