@@ -18,7 +18,7 @@ Ceres.js takes a vector of residual equations that are all equal to zero when th
 
 ```html
 <script type="module">
-	import {Ceres} from 'https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/Ceres-v1.4.8.js' //Always imported via ES6 import
+	import {Ceres} from 'https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/Ceres-v1.4.9.js' //Always imported via ES6 import
 
 	var fn1 = function f1(x){
 		return (x[0]+10*x[1]-20); //this equation is of the form f1(x) = 0 

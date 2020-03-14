@@ -105,7 +105,7 @@ class Ceresjs {
 		this->upperbound.clear();
 		this->upperboundValue.clear();
 	}
-	bool solve(val max_num_iterations, val parameter_tolerance, val function_tolerance, val gradient_tolerance){
+	bool solve(val max_num_iterations, val parameter_tolerance, val function_tolerance, val gradient_tolerance, val max_solver_time_in_seconds){
 		
 		std::stringstream buffer;
 		std::streambuf * old = std::cout.rdbuf(buffer.rdbuf());
@@ -126,6 +126,9 @@ class Ceresjs {
 		options.function_tolerance = function_tolerance.as<double>();
 		options.gradient_tolerance = gradient_tolerance.as<double>();
 		options.max_num_iterations = max_num_iterations.as<double>();
+		options.preconditioner_type = ceres::JACOBI;
+		options.use_nonmonotonic_steps = true;
+		options.max_solver_time_in_seconds = max_solver_time_in_seconds.as<double>();
 		options.minimizer_progress_to_stdout = true;
 		
 		options.update_state_every_iteration = true;
