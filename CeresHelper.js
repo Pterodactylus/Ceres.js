@@ -79,7 +79,7 @@ export class Ceres {
 		}
 	}
 	// Method
-	solve(xi, max_numb_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16, max_solver_time_in_seconds = 100) {
+	solve(xi, max_numb_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16, max_solver_time_in_seconds = 100, initial_trust_region_radius = 1e4) {
 		if(this.loaded == true){
 			if(this.varLength <= this.maxLength ){this.varLength = this.fxn.length}
 			else{throw "Max number of vars exceeded"}
@@ -94,7 +94,7 @@ export class Ceres {
 			let parameter_tol = parameter_tolerance
 			let function_tol = function_tolerance
 			let gradient_tol = gradient_tolerance
-			let success = this.instance.solve(max_num_iterations, parameter_tol, function_tol, gradient_tol, max_solver_time_in_seconds);
+			let success = this.instance.solve(max_num_iterations, parameter_tol, function_tol, gradient_tol, max_solver_time_in_seconds, initial_trust_region_radius);
 			let report = this.instance.get_report();
 			let message = this.instance.get_message();
 			//console.log(report)
