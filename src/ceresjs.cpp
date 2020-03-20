@@ -105,7 +105,7 @@ class Ceresjs {
 		this->upperbound.clear();
 		this->upperboundValue.clear();
 	}
-	bool solve(val max_num_iterations, val parameter_tolerance, val function_tolerance, val gradient_tolerance, val max_solver_time_in_seconds, val initial_trust_region_radius){
+	bool solve(val max_num_iterations, val parameter_tolerance, val function_tolerance, val gradient_tolerance, val max_solver_time_in_seconds, val initial_trust_region_radius, val max_trust_region_radius){
 		
 		std::stringstream buffer;
 		std::streambuf * old = std::cout.rdbuf(buffer.rdbuf());
@@ -130,6 +130,7 @@ class Ceresjs {
 		options.use_nonmonotonic_steps = true;
 		options.initial_trust_region_radius = initial_trust_region_radius.as<double>();
 		options.max_solver_time_in_seconds = max_solver_time_in_seconds.as<double>();
+		options.max_trust_region_radius = max_trust_region_radius.as<double>();
 		options.minimizer_progress_to_stdout = true;
 		
 		options.update_state_every_iteration = true;
