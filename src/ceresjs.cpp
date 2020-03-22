@@ -126,7 +126,7 @@ class Ceresjs {
 		options.function_tolerance = function_tolerance.as<double>();
 		options.gradient_tolerance = gradient_tolerance.as<double>();
 		options.max_num_iterations = max_num_iterations.as<double>();
-		options.preconditioner_type = ceres::JACOBI;
+		options.preconditioner_type = ceres::CLUSTER_TRIDIAGONAL;
 		options.use_nonmonotonic_steps = true;
 		options.initial_trust_region_radius = initial_trust_region_radius.as<double>();
 		options.max_solver_time_in_seconds = max_solver_time_in_seconds.as<double>();
