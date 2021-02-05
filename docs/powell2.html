@@ -30,8 +30,8 @@
 		return Math.sqrt(10)*Math.pow(x[0]-x[3],2);
 	}
 	
-  var fn5 = function (x){
-		return fn1(x)^2+fn2(x)^2+fn3(x)^2+fn4(x)^2;
+  	var fn5 = function f5(x){
+		return Math.pow(f1(x),2)+Math.pow(f2(x),2)+Math.pow(f3(x),2)+Math.pow(f4(x),2);
 	}
 	
 	let solver = new Ceres()
@@ -39,7 +39,7 @@
 	///solver.add_function(fn2) //Add the second equation to the solver.
 	//solver.add_function(fn3) //Add the third equation to the solver.
 	//solver.add_function(fn4) //Add the forth equation to the solver.
-  solver.add_function(fn5) //Add the forth equation to the solver.
+  	solver.add_function(fn5) //Add the forth equation to the solver.
 	//solver.add_callback(c1) //Add the callback to the solver.
 	//solver.add_lowerbound(0,1.6) //Add a lower bound to the x[0] variable
 	//solver.add_upperbound(1,1.7) //Add a upper bound to the x[1] variable
