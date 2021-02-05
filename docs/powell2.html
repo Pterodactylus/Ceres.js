@@ -13,24 +13,23 @@
 
 <script type="module">
 	import {Ceres} from 'https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/Ceres-v1.4.13.js'
-
-	var fn1 = function f1(x){
-		return (x[0]+10*x[1]);
-	}
-
-	var fn2 = function f2(x){
-		return (Math.sqrt(5)*(x[2]-x[3]));
-	}
-	
-	var fn3 = function f3(x){
-		return Math.pow(x[1]-2*x[2],2);
-	}
-	
-	var fn4 = function f4(x){
-		return Math.sqrt(10)*Math.pow(x[0]-x[3],2);
-	}
 	
   	var fn5 = function f5(x){
+		var fn1 = function f1(x){
+			return (x[0]+10*x[1]);
+		}
+
+		var fn2 = function f2(x){
+			return (Math.sqrt(5)*(x[2]-x[3]));
+		}
+
+		var fn3 = function f3(x){
+			return Math.pow(x[1]-2*x[2],2);
+		}
+
+		var fn4 = function f4(x){
+			return Math.sqrt(10)*Math.pow(x[0]-x[3],2);
+		}
 		return Math.pow(fn1(x),2)+Math.pow(fn2(x),2)+Math.pow(fn3(x),2)+Math.pow(fn4(x),2);
 	}
 	
