@@ -12,7 +12,7 @@
 </textarea>
 
 <script type="module">
-	import {CeresGrad} from 'https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/Ceres-v1.5.2.js'
+	import {CeresGrad} from 'https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/Ceres-v1.5.3.js'
 	//import {CeresGrad} from 'https://raw.githubusercontent.com/Pterodactylus/Ceres.js/master/Ceres-v1.5.1.js'
 	//import {CeresGrad} from '../Ceres-v1.5.1.js'
 	
@@ -47,7 +47,7 @@
 	
 	solver.promise.then(function(result) { 
 		var x_guess = [1,2,3,4] //Guess the initial values of the solution.
-		var s = solver.solve(x_guess) //Solve the equation
+		var s = solver.solve() //Solve the equation
 		var x = s.x //assign the calculated solution array to the variable x
 		document.getElementById("demo").value = s.report //Print solver report
 		solver.remove() //required to free the memory in C++

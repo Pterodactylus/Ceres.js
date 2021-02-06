@@ -272,9 +272,9 @@ class CeresjsGrad {
 		this->upperbound.clear();
 		this->upperboundValue.clear();
 	}
-	bool solve(val max_num_iterations, val parameter_tolerance, val function_tolerance, val gradient_tolerance, val max_solver_time_in_seconds, val initial_trust_region_radius, val max_trust_region_radius, val max_num_consecutive_invalid_steps){
+	bool solve(){
 		
-		class Rosenbrock : public ceres::FirstOrderFunction {
+		class Rosenbrock : public FirstOrderFunction {
 		 public:
 		  virtual bool Evaluate(const double* parameters,
 								double* cost,
@@ -295,12 +295,12 @@ class CeresjsGrad {
 		
 		double parameters[2] = {-1.2, 1.0};
 
-		ceres::GradientProblem problem(new Rosenbrock());
+		GradientProblem problem(new Rosenbrock());
 
-		ceres::GradientProblemSolver::Options options;
+		GradientProblemSolver::Options options;
 		options.minimizer_progress_to_stdout = true;
-		ceres::GradientProblemSolver::Summary summary;
-		ceres::Solve(options, problem, parameters, &summary);
+		GradientProblemSolver::Summary summary;
+		Solve(options, problem, parameters, &summary);
 
 		std::cout << summary.FullReport() << "\n";
 		/*std::stringstream buffer;
