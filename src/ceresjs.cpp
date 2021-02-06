@@ -179,6 +179,9 @@ class Ceresjs {
 	}
 };
 
+class CeresjsGrad {
+	
+};
 
 // Binding code
 EMSCRIPTEN_BINDINGS(my_class_example) {

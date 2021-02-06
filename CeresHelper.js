@@ -120,9 +120,63 @@ export class Ceres {
 }
 
 
+export class CeresGrad {
+	constructor() {
+		this.loaded = false
+		this.fxn = []
+		this.lowerbound = []
+		this.upperbound = []
+		this.callback = []
+		
+		// Create example data to test float_multiply_array
+		this.varLength = 0
+		this.maxLength = 1000
+		this.data = new Float64Array(this.maxLength);
+		
+		this.promise = new Promise(function(resolve, reject){
+			CeresModule().then(function(Module){
+				this.instance = new Module.Ceresjs
 
+				// Get data byte size, allocate memory on Emscripten heap, and get pointer
+				let nDataBytes = this.data.length * this.data.BYTES_PER_ELEMENT;
+				let dataPtr = Module._malloc(nDataBytes);
 
-
-
-
-
+				// Copy data to Emscripten heap (directly accessed from Module.HEAPU8)
+				this.dataHeap = new Float64Array(Module.HEAPF64.buffer, dataPtr, nDataBytes);
+				this.dataHeap.set(new Float64Array(this.data.buffer));
+				this.loaded = true
+				resolve()
+			}.bind(this))
+		}.bind(this))
+	}
+	// Method
+	add_function(fn) {
+		
+	}
+	// Method
+	add_lowerbound(xNumber, lowerBound) {
+		
+	}
+	// Method
+	add_upperbound(xNumber, upperBound) {
+		
+	}
+	// Method
+	add_callback(fn) {
+		
+	}
+	reset(){
+		
+		
+	}
+	//Method
+	load_fxns(){
+		
+	}
+	// Method
+	solve(xi, max_numb_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16, max_solver_time_in_seconds = 100, initial_trust_region_radius = 1e4, max_trust_region_radius = 1e16, max_num_consecutive_invalid_steps = 5) {
+		
+	}
+	remove(){
+	}
+}
