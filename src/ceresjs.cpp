@@ -366,6 +366,7 @@ class CeresjsGrad {
 		this->message = summary.message;
 		
 		return summary.IsSolutionUsable();*/
+		return true;
 	}
 	std::string get_report(){
 		return this->report;
