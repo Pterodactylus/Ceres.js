@@ -24,7 +24,7 @@ source ./emsdk_env.sh
 
 mkdir $bdir/packages
 cd $bdir/packages
-git clone https://ceres-solver.googlesource.com/ceres-solver $bdir/packages/ceres-solver
+git clone -b "2.0.0" https://ceres-solver.googlesource.com/ceres-solver $bdir/packages/ceres-solver
 git clone https://gitlab.com/libeigen/eigen.git $bdir/packages/eigen
 
 #rm -rf ~/ceres.js-master/buildpkg
@@ -44,7 +44,8 @@ mkdir $bdir/installpkg
 #rm -rf ~/ceres.js-master/buildpkg/eigen
 mkdir $bdir/buildpkg/eigen
 cd $bdir/buildpkg/eigen
-$bdir/emsdk/upstream/emscripten/emconfigure cmake $bdir/packages/eigen -DCMAKE_INSTALL_PREFIX=$bdir/installpkg
+#$bdir/emsdk/upstream/emscripten/emconfigure cmake $bdir/packages/eigen -DCMAKE_INSTALL_PREFIX=$bdir/installpkg
+$bdir/emsdk/upstream/emscripten/emcmake cmake $bdir/packages/eigen -DCMAKE_INSTALL_PREFIX=$bdir/installpkg
 $bdir/emsdk/upstream/emscripten/emmake make 
 make -j4 install
 
@@ -55,7 +56,8 @@ cd $bdir/buildpkg/ceres-solver
 #Turn Minilog On
 #Turn sparse off
 cp --verbose $cwd/CMakeListsCeres.txt $bdir/packages/ceres-solver/CMakeLists.txt
-$bdir/emsdk/upstream/emscripten/emconfigure cmake $bdir/packages/ceres-solver -DCMAKE_INSTALL_PREFIX=$bdir/installpkg -DEigen3_DIR=$bdir/installpkg/share/eigen3/cmake
+#$bdir/emsdk/upstream/emscripten/emconfigure cmake $bdir/packages/ceres-solver -DCMAKE_INSTALL_PREFIX=$bdir/installpkg -DEigen3_DIR=$bdir/installpkg/share/eigen3/cmake
+$bdir/emsdk/upstream/emscripten/emcmake cmake $bdir/packages/ceres-solver -DCMAKE_INSTALL_PREFIX=$bdir/installpkg -DEigen3_DIR=$bdir/installpkg/share/eigen3/cmake
 make -j4 install
 
 #rm -r $bdir/Ceres.js
@@ -64,9 +66,10 @@ cd $bdir/Ceres.js
 
 #This line is returning an error due to problems with the ceres solver. The sed command is a workaround.
 sed -i 's/include(CeresCodeGeneration)/# include(CeresCodeGeneration)/' $bdir/installpkg/lib/cmake/Ceres/CeresConfig.cmake
-$bdir/emsdk/upstream/emscripten/emconfigure cmake $cwd/ -DCMAKE_INSTALL_PREFIX=$bdir/installpkg
+#$bdir/emsdk/upstream/emscripten/emconfigure cmake $cwd/ -DCMAKE_INSTALL_PREFIX=$bdir/installpkg
+$bdir/emsdk/upstream/emscripten/emcmake cmake $cwd/ -DCMAKE_INSTALL_PREFIX=$bdir/installpkg
 $bdir/emsdk/upstream/emscripten/emmake make
-cp --verbose $bdir/Ceres.js/Ceres.js $cwd/Ceres-v1.3.4.js
+cp --verbose $bdir/Ceres.js/Ceres.js $cwd/Ceres-v1.5.1.js
 
 #~/emsdk/upstream/emscripten/emrun --browser "explorer.exe" ~/ceres.js-master/index.html
 #~/emsdk/upstream/emscripten/emrun --browser "explorer.exe" ~/ceres.js-master/test.html
