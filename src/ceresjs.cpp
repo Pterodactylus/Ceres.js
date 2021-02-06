@@ -274,7 +274,7 @@ class CeresjsGrad {
 	}
 	bool solve(){
 		
-		class Rosenbrock : public FirstOrderFunction {
+		class Rosenbrock : public ceres::FirstOrderFunction {
 		 public:
 		  virtual bool Evaluate(const double* parameters,
 								double* cost,
@@ -295,12 +295,12 @@ class CeresjsGrad {
 		
 		double parameters[2] = {-1.2, 1.0};
 
-		GradientProblem problem(new Rosenbrock());
+		ceres::GradientProblem problem(new Rosenbrock());
 
-		GradientProblemSolver::Options options;
+		ceres::GradientProblemSolver::Options options;
 		options.minimizer_progress_to_stdout = true;
-		GradientProblemSolver::Summary summary;
-		Solve(options, problem, parameters, &summary);
+		ceres::GradientProblemSolver::Summary summary;
+		ceres::Solve(options, problem, parameters, &summary);
 
 		std::cout << summary.FullReport() << "\n";
 		/*std::stringstream buffer;
