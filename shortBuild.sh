@@ -14,7 +14,7 @@ $bdir/emsdk/upstream/emscripten/emcmake cmake $cwd/ -DCMAKE_INSTALL_PREFIX=$bdir
 $bdir/emsdk/upstream/emscripten/emmake make
 cat $cwd/CeresHelper.js >> $bdir/Ceres.js/Ceres.js
 
-cp --verbose $bdir/Ceres.js/Ceres.js $cwd/Ceres-v1.5.1.js
+cp --verbose $bdir/Ceres.js/Ceres.js $cwd/Ceres-v1.5.2.js
 #cp --verbose $bdir/Ceres.js/Ceres.wasm.map $cwd/Ceres.wasm.map
 
 
