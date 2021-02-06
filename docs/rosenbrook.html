@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<body>
+
+<h2>Powell Function</h2>
+<p>This is an example of the solution of the powell function using Ceres.js</p>
+
+<textarea id="demo" rows="40" cols="170">
+</textarea>
+
+<script type="module">
+	import {Ceres} from 'https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/Ceres-v1.5.1.js'
+	
+  	var fn5 = function f5(x){
+		var fn1 = function f1(x){
+			return (x[0]+10*x[1]);
+		}
+
+		var fn2 = function f2(x){
+			return (Math.sqrt(5)*(x[2]-x[3]));
+		}
+
+		var fn3 = function f3(x){
+			return Math.pow(x[1]-2*x[2],2);
+		}
+
+		var fn4 = function f4(x){
+			return Math.sqrt(10)*Math.pow(x[0]-x[3],2);
+		}
+		return Math.pow(fn1(x),2)+Math.pow(fn2(x),2)+Math.pow(fn3(x),2)+Math.pow(fn4(x),2);
+	}
+	
+	let solver = new CeresGrad()
+	//solver.add_function(fn1) //Add the first equation to the solver.
+	///solver.add_function(fn2) //Add the second equation to the solver.
+	//solver.add_function(fn3) //Add the third equation to the solver.
+	//solver.add_function(fn4) //Add the forth equation to the solver.
+  	//solver.add_function(fn5) //Add the forth equation to the solver.
+	//solver.add_callback(c1) //Add the callback to the solver.
+	//solver.add_lowerbound(0,1.6) //Add a lower bound to the x[0] variable
+	//solver.add_upperbound(1,1.7) //Add a upper bound to the x[1] variable
+	
+	solver.promise.then(function(result) { 
+		var x_guess = [1,2,3,4] //Guess the initial values of the solution.
+		var s = solver.solve(x_guess) //Solve the equation
+		var x = s.x //assign the calculated solution array to the variable x
+		document.getElementById("demo").value = s.report //Print solver report
+		solver.remove() //required to free the memory in C++
+	})
+</script>
+</body>
+</html>
