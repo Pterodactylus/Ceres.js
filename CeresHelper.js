@@ -135,7 +135,7 @@ export class CeresGrad {
 		
 		this.promise = new Promise(function(resolve, reject){
 			CeresModule().then(function(Module){
-				this.instance = new Module.Ceresjs
+				this.instance = new Module.CeresjsGrad
 
 				// Get data byte size, allocate memory on Emscripten heap, and get pointer
 				let nDataBytes = this.data.length * this.data.BYTES_PER_ELEMENT;
@@ -151,31 +151,77 @@ export class CeresGrad {
 	}
 	// Method
 	add_function(fn) {
-		
+		this.fxn.push(fn)
 	}
 	// Method
 	add_lowerbound(xNumber, lowerBound) {
-		
+		this.lowerbound.push([xNumber, lowerBound])
 	}
 	// Method
 	add_upperbound(xNumber, upperBound) {
-		
+		this.upperbound.push([xNumber, upperBound])
 	}
 	// Method
 	add_callback(fn) {
-		
+		this.callback.push(fn)
 	}
 	reset(){
-		
-		
+		this.instance.reset();
+		this.fxn = []
+		this.lowerbound = []
+		this.upperbound = []
+		this.callback = []
 	}
 	//Method
 	load_fxns(){
-		
+		for(let i = 0; i < this.fxn.length; i++){
+			let newfunc = function f(){
+				let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.varLength);
+				return this.fxn[i](x)
+			}
+			this.instance.add_function(newfunc.bind(this));
+		}
+		for(let i = 0; i < this.lowerbound.length; i++){
+			this.instance.add_lowerbound(this.lowerbound[i][0], this.lowerbound[i][1]);
+		}
+		for(let i = 0; i < this.upperbound.length; i++){
+			this.instance.add_upperbound(this.upperbound[i][0], this.upperbound[i][1]);
+		}
+		for(let i = 0; i < this.callback.length; i++){
+			let newfunc = function f(evaluate_jacobians, new_evaluation_point){
+				let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.varLength);
+				return this.callback[i](x, evaluate_jacobians, new_evaluation_point);
+			}
+			this.instance.add_callback(newfunc.bind(this));
+		}
 	}
 	// Method
-	solve() {
-		this.instance.solve();
+	solve(xi, max_numb_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16, max_solver_time_in_seconds = 100) {
+		if(this.loaded == true){
+			this.varLength = xi.length
+			this.load_fxns()
+			
+			for(let i = 0; i < xi.length; i++){
+				this.dataHeap[i] = xi[i];
+			}
+			this.instance.setup_x(this.dataHeap.byteOffset, this.varLength);
+			
+			let success = this.instance.solve(max_numb_iterations, parameter_tolerance, function_tolerance, gradient_tolerance, max_solver_time_in_seconds);
+			let report = this.instance.get_report();
+			let message = this.instance.get_message();
+			
+			let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.varLength)
+			let normalArray = [].slice.call(x);
+			let txt = "";
+			for(let i=0; i<normalArray.length; i++){
+				txt = txt + "\n" + "x" + i + " = " + normalArray[i]
+			}
+			
+			return { success: success, message: message, x: normalArray, report: report+txt}
+		}
+		else{
+			console.log("Warning the Ceres.js wasm has not been loaded yet.")
+		}
 	}
 	remove(){
 	}
