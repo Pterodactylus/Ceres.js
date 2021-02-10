@@ -250,7 +250,7 @@ class CeresjsGrad {
 				return true;
 			}
 			
-			virtual int NumParameters() const { return 2; }
+			virtual int NumParameters() const { return this->xArrayLen; }
 	};
 	class CallbackFxn : public ceres::IterationCallback {
 		std::vector<val> f;
@@ -295,7 +295,7 @@ class CeresjsGrad {
 		this->upperbound.clear();
 		this->upperboundValue.clear();
 	}
-	bool solve(val max_num_iterations, val parameter_tolerance, val function_tolerance, val gradient_tolerance, val max_solver_time_in_seconds){
+	bool solve(std::vector<val> xi, val max_num_iterations, val parameter_tolerance, val function_tolerance, val gradient_tolerance, val max_solver_time_in_seconds){
 		
 		std::stringstream buffer;
 		std::streambuf * old = std::cout.rdbuf(buffer.rdbuf());
@@ -303,8 +303,11 @@ class CeresjsGrad {
 		std::stringstream Errbuffer;
 		std::streambuf * Errold = std::cerr.rdbuf(Errbuffer.rdbuf());
 		
-		double parameters[2] = {-1.2, 1.0};
-
+		double* parameters;
+		for(int i=0; i<xi.size(); i++){
+			parameters[i] = xi[i].as<double>();
+		}
+		
 		ceres::GradientProblem problem(new UnconstrainedMinimizer(this->f, this->xArray, this->xArrayLen));
 
 		ceres::GradientProblemSolver::Options options;
