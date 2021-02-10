@@ -295,18 +295,13 @@ class CeresjsGrad {
 		this->upperbound.clear();
 		this->upperboundValue.clear();
 	}
-	bool solve(std::vector<val> xi, val max_num_iterations, val parameter_tolerance, val function_tolerance, val gradient_tolerance, val max_solver_time_in_seconds){
+	bool solve(val max_num_iterations, val parameter_tolerance, val function_tolerance, val gradient_tolerance, val max_solver_time_in_seconds){
 		
 		std::stringstream buffer;
 		std::streambuf * old = std::cout.rdbuf(buffer.rdbuf());
 		
 		std::stringstream Errbuffer;
 		std::streambuf * Errold = std::cerr.rdbuf(Errbuffer.rdbuf());
-		
-		double* parameters;
-		for(int i=0; i<xi.size(); i++){
-			parameters[i] = xi[i].as<double>();
-		}
 		
 		ceres::GradientProblem problem(new UnconstrainedMinimizer(this->f, this->xArray, this->xArrayLen));
 
@@ -324,7 +319,7 @@ class CeresjsGrad {
 		options.callbacks = callback;
 		
 		ceres::GradientProblemSolver::Summary summary;
-		ceres::Solve(options, problem, parameters, &summary);
+		ceres::Solve(options, problem, this->xArray, &summary);
 
 		//std::cout << summary.FullReport() << "\n";
 		this->report = summary.FullReport();

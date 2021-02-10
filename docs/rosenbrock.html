@@ -16,28 +16,23 @@
 	import {CeresGrad} from '../Ceres-v1.5.3.js'
 	
   	var fn1 = function (x){
-		//cost[0] = (1.0 - x) * (1.0 - x) + 100.0 * (y - x * x) * (y - x * x);
 		return (1.0 - x[0]) * (1.0 - x[0]) + 100.0 * (x[1] - x[0] * x[0]) * (x[1] - x[0] * x[0]);
 	}
 	
 	var c1 = function(x){
-		console.log("Min Loop xxx")
-		console.log(x)
+		//console.log("Min Loop xxx")
+		console.log(x+" ")
 		return null
 	}
 	
 	let solver = new CeresGrad()
 	solver.add_function(fn1) //Add the first equation to the solver.
-	///solver.add_function(fn2) //Add the second equation to the solver.
-	//solver.add_function(fn3) //Add the third equation to the solver.
-	//solver.add_function(fn4) //Add the forth equation to the solver.
-  	//solver.add_function(fn5) //Add the forth equation to the solver.
 	/solver.add_callback(c1) //Add the callback to the solver.
 	//solver.add_lowerbound(0,1.6) //Add a lower bound to the x[0] variable
 	//solver.add_upperbound(1,1.7) //Add a upper bound to the x[1] variable
 	
 	solver.promise.then(function(result) { 
-		var x_guess = [-1.2, 1.0] //Guess the initial values of the solution.
+		var x_guess = [-2, 1.0] //Guess the initial values of the solution.
 		var s = solver.solve(x_guess) //Solve the equation
 		console.log(s)
 		//var x = s.x //assign the calculated solution array to the variable x
