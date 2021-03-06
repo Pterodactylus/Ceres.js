@@ -113,10 +113,12 @@ class Ceresjs {
 		std::stringstream Errbuffer;
 		std::streambuf * Errold = std::cerr.rdbuf(Errbuffer.rdbuf());
 		
-		double x[this->size];
-		double xi[this->size];
 		
-		for(int i=0; i<this->size; i++){
+		//this->xArrayLen
+		double x[this->xArrayLen];
+		double xi[this->xArrayLen];
+		
+		for(int i=0; i<this->xArrayLen; i++){
 			xi[i] = this->xArray[i];
 			x[i] = this->xArray[i];
 		}
@@ -143,7 +145,7 @@ class Ceresjs {
 		
 		CostFunctor* cfunctor = new CostFunctor(this->f, this->xArray, this->xArrayLen);
 		DynamicNumericDiffCostFunction<CostFunctor, CENTRAL>* functor = new DynamicNumericDiffCostFunction<CostFunctor, CENTRAL> (cfunctor);
-		functor->AddParameterBlock(this->size);
+		functor->AddParameterBlock(this->xArrayLen);
 		functor->SetNumResiduals(this->size);
 		problem.AddResidualBlock(functor, NULL, x);
 		
