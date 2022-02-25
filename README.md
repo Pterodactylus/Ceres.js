@@ -56,9 +56,10 @@ Ceres.js takes a vector of residual equations that are all equal to zero when th
 ```
 
 ## Reference
-The Ceres class starts an instance of the Ceres solver. It has four methods.
+The Ceres class starts an instance of the Ceres solver. It has 5 methods.
 
 1. The `Ceres()` constructor method takes no inputs and creates a new Solver instance.
 2. The `add_function(fxn_handle)` method takes a function that has input of an array of number equal in length to the total number of functions. Each of the function should return a residule. The residuals returned should equal zero at the solution point i.e. F(x) = 0.
 3. The `add_callback(callback_handle)` method takes a function that has input of an array of number equal in length to the total number of functions. This callback function is run every time before a function evaluation. You can use it to print intermediate results.
 4. The `solve(initial_guesses, max_num_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16, max_solver_time_in_seconds = 100, initial_trust_region_radius = 1e4, max_trust_region_radius = 1e16, max_num_consecutive_invalid_steps = 5)` function requires an array `initial_guesses = [x1_init, x2_init, etc.. ]` that defines the solver starting point. This function returns an `x` solution array and a `report` variable with a full report of the solver output.
+5. The `reset()` removes the loaded functions and allows new functions to be assigned to the same object.
