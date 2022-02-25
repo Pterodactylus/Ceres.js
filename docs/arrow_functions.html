@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<body>
+
+<h2>User Defined Function</h2>
+<p>This is an example of the solution of the user defined function using Ceres.js</p>
+
+<textarea id="demo" rows="40" cols="170">
+</textarea>
+
+<script type="module">
+	import {Ceres} from 'https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/Ceres-v1.5.3.js'
+
+	let solver = new Ceres()
+	solver.add_function((x) => -x[0]*x[0] + 9) //Add the first equation to the solver.
+
+	solver.promise.then(function(result) {
+		var x_guess = [1] //Guess the initial values of the solution.
+		var s = solver.solve(x_guess) //Solve the equation
+		var x = s.x //assign the calculated solution array to the variable x
+		document.getElementById("demo").value = s.report //Print solver report
+		solver.remove() //required to free the memory in C++
+	})
+</script>
+</body>
+</html>
