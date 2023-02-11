@@ -55,6 +55,9 @@ Ceres.js takes a vector of residual equations that are all equal to zero when th
 </script>
 ```
 
+## More Examples
+A full list of examples is avalible on our website https://pterodactylus.github.io/Ceres.js/
+
 ## Reference
 The Ceres class starts an instance of the Ceres solver. It has 5 methods.
 
