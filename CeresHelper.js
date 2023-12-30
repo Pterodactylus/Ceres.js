@@ -32,19 +32,22 @@ export class Ceres {
 		}.bind(this))
 	}
 	// Method
-	add_function(fn) {
+	addFunction(fn) {
 		this.fxn.push(fn)
 	}
+	addFunctions(functions) {
+        functions.forEach(fn => this.addFunction(fn));
+    }
 	// Method
-	add_lowerbound(xNumber, lowerBound) {
+	addLowerbound(xNumber, lowerBound) {
 		this.lowerbound.push([xNumber, lowerBound])
 	}
 	// Method
-	add_upperbound(xNumber, upperBound) {
+	addUpperbound(xNumber, upperBound) {
 		this.upperbound.push([xNumber, upperBound])
 	}
 	// Method
-	add_callback(fn) {
+	addCallback(fn) {
 		this.callback.push(fn)
 	}
 	reset(){
@@ -62,20 +65,20 @@ export class Ceres {
 				let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.varLength);
 				return this.fxn[i](x)
 			}
-			this.instance.add_function(newfunc.bind(this));
+			this.instance.addFunction(newfunc.bind(this));
 		}
 		for(let i = 0; i < this.lowerbound.length; i++){
-			this.instance.add_lowerbound(this.lowerbound[i][0], this.lowerbound[i][1]);
+			this.instance.addLowerbound(this.lowerbound[i][0], this.lowerbound[i][1]);
 		}
 		for(let i = 0; i < this.upperbound.length; i++){
-			this.instance.add_upperbound(this.upperbound[i][0], this.upperbound[i][1]);
+			this.instance.addUpperbound(this.upperbound[i][0], this.upperbound[i][1]);
 		}
 		for(let i = 0; i < this.callback.length; i++){
 			let newfunc = function f(evaluate_jacobians, new_evaluation_point){
 				let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.varLength);
 				return this.callback[i](x, evaluate_jacobians, new_evaluation_point);
 			}
-			this.instance.add_callback(newfunc.bind(this));
+			this.instance.addCallback(newfunc.bind(this));
 		}
 	}
 	// Method
@@ -117,10 +120,57 @@ export class Ceres {
 		this.loaded == false;
 		this.instance.delete();
 	}
+
+	parseFunctionFromJson(jsonFunction, variablesMapping) {
+        let parsedFunction = jsonFunction;
+
+        // Replace variables with their corresponding indexed representations
+        Object.keys(variablesMapping).forEach((varName, index) => {
+            let regex = new RegExp('\\b' + varName + '\\b', 'g');
+            parsedFunction = parsedFunction.replace(regex, `x[${index}]`);
+        });
+
+        return new Function('x', `return ${parsedFunction}`);
+    }
+
+	sanitizeInput(input) {
+        // Return input without any potentially harmful JavaScript string
+        return input.replace(/[<>]/g, "");
+    }
+
+    setSystemFromJson(jsonSystem) {
+        // sanitize the input to prevent injection attacks
+        jsonSystem.functions = jsonSystem.functions.map(this.sanitizeInput);
+        jsonSystem.callbacks = jsonSystem.callbacks.map(this.sanitizeInput);
+    
+        jsonSystem.functions.forEach(jsonFunction => this.solver.add_function(this.parseFunctionFromJson(jsonFunction, jsonSystem.variables)));
+        
+        jsonSystem.callbacks.forEach(callback => this.solver.add_callback(callback));
+
+        Object.keys(jsonSystem.variables).forEach((varName, index) => {
+            let variable = jsonSystem.variables[varName];
+            if (variable.lowerbound || variable.lowerbound === 0) {
+                this.solver.add_lowerbound(index, variable.lowerbound);
+            }
+            if (variable.upperbound || variable.upperbound === 0) {
+                this.solver.add_upperbound(index, variable.upperbound);
+            }
+        });
+    }
+
+    generateInitialGuess(variablesMapping) {
+        return Object.keys(variablesMapping).map(varName => variablesMapping[varName].guess);
+    }
+
+	run(jsonSystem, max_numb_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16, max_solver_time_in_seconds = 100, initial_trust_region_radius = 1e4, max_trust_region_radius = 1e16, max_num_consecutive_invalid_steps = 5) {
+        this.setSystemFromJson(jsonSystem);
+        let initial_guess = this.generateInitialGuess(jsonSystem.variables);
+		this.solve(initial_guess, max_numb_iterations, parameter_tolerance, function_tolerance, gradient_tolerance, max_solver_time_in_seconds, initial_trust_region_radius, max_trust_region_radius, max_num_consecutive_invalid_steps);
+	}
 }
 
-
-export class CeresGrad {
+/*
+class CeresGrad {
 	constructor() {
 		this.loaded = false
 		this.fxn = []
@@ -226,3 +276,4 @@ export class CeresGrad {
 	remove(){
 	}
 }
+*/
