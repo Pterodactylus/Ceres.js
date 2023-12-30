@@ -4593,29 +4593,29 @@ export class Ceres {
         return input.replace(/[<>]/g, "");
     }
 
-    setSystemFromJson(jsonSystem) {
-        // sanitize the input to prevent injection attacks
-        jsonSystem.functions = jsonSystem.functions.map(this.sanitizeInput);
-        jsonSystem.callbacks = jsonSystem.callbacks.map(this.sanitizeInput);
-    
-        jsonSystem.functions.forEach(jsonFunction => this.solver.add_function(this.parseFunctionFromJson(jsonFunction, jsonSystem.variables)));
-        
-        jsonSystem.callbacks.forEach(callback => this.solver.add_callback(callback));
+  setSystemFromJson(jsonSystem) {
+      // sanitize the input to prevent injection attacks
+      jsonSystem.functions = jsonSystem.functions.map(this.sanitizeInput);
+      jsonSystem.callbacks = jsonSystem.callbacks.map(this.sanitizeInput);
+  
+      jsonSystem.functions.forEach(jsonFunction => this.solver.add_function(this.parseFunctionFromJson(jsonFunction, jsonSystem.variables)));
+      
+      jsonSystem.callbacks.forEach(callback => this.solver.add_callback(callback));
 
-        Object.keys(jsonSystem.variables).forEach((varName, index) => {
-            let variable = jsonSystem.variables[varName];
-            if (variable.lowerbound || variable.lowerbound === 0) {
-                this.solver.add_lowerbound(index, variable.lowerbound);
-            }
-            if (variable.upperbound || variable.upperbound === 0) {
-                this.solver.add_upperbound(index, variable.upperbound);
-            }
-        });
-    }
+      Object.keys(jsonSystem.variables).forEach((varName, index) => {
+          let variable = jsonSystem.variables[varName];
+          if (variable.lowerbound || variable.lowerbound === 0) {
+              this.solver.add_lowerbound(index, variable.lowerbound);
+          }
+          if (variable.upperbound || variable.upperbound === 0) {
+              this.solver.add_upperbound(index, variable.upperbound);
+          }
+      });
+  }
 
-    generateInitialGuess(variablesMapping) {
-        return Object.keys(variablesMapping).map(varName => variablesMapping[varName].guess);
-    }
+  generateInitialGuess(variablesMapping) {
+      return Object.keys(variablesMapping).map(varName => variablesMapping[varName].guess);
+  }
 
 	run(jsonSystem, max_numb_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16, max_solver_time_in_seconds = 100, initial_trust_region_radius = 1e4, max_trust_region_radius = 1e16, max_num_consecutive_invalid_steps = 5) {
         this.setSystemFromJson(jsonSystem);
