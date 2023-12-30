@@ -16,7 +16,8 @@ You can install Ceres.js by including the Ceres.js file in your HTML or js code.
 Ceres.js takes a vector of residual equations that are all equal to zero when the problem is solved. The equations can be non-linear. Here is a basic example.
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/Ceres-v2.0.0.js">
+<script src="https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/Ceres-v2.0.0.js"></script>
+<script>
 
 	let jsonSystem = {
 		"variables": {
