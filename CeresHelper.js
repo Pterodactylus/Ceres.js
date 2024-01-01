@@ -65,20 +65,20 @@ export class Ceres {
 				let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.varLength);
 				return this.fxn[i](x)
 			}
-			this.instance.addFunction(newfunc.bind(this));
+			this.instance.add_function(newfunc.bind(this));
 		}
 		for(let i = 0; i < this.lowerbound.length; i++){
-			this.instance.addLowerbound(this.lowerbound[i][0], this.lowerbound[i][1]);
+			this.instance.add_lowerbound(this.lowerbound[i][0], this.lowerbound[i][1]);
 		}
 		for(let i = 0; i < this.upperbound.length; i++){
-			this.instance.addUpperbound(this.upperbound[i][0], this.upperbound[i][1]);
+			this.instance.add_upperbound(this.upperbound[i][0], this.upperbound[i][1]);
 		}
 		for(let i = 0; i < this.callback.length; i++){
 			let newfunc = function f(evaluate_jacobians, new_evaluation_point){
 				let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.varLength);
 				return this.callback[i](x, evaluate_jacobians, new_evaluation_point);
 			}
-			this.instance.addCallback(newfunc.bind(this));
+			this.instance.add_callback(newfunc.bind(this));
 		}
 	}
 	// Method
