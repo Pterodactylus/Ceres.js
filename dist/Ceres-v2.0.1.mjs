@@ -4455,6 +4455,7 @@ else if (typeof exports === 'object')
   exports["CeresModule"] = CeresModule;
 
 
+
 //Ceres Helper JS
 
 export class Ceres {
@@ -4520,7 +4521,7 @@ export class Ceres {
 				let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.varLength);
 				return this.fxn[i](x)
 			}
-			this.instance.addFunction(newfunc.bind(this));
+			this.instance.add_function(newfunc.bind(this));
 		}
 		for(let i = 0; i < this.lowerbound.length; i++){
 			this.instance.addLowerbound(this.lowerbound[i][0], this.lowerbound[i][1]);
@@ -4593,29 +4594,29 @@ export class Ceres {
         return input.replace(/[<>]/g, "");
     }
 
-  setSystemFromJson(jsonSystem) {
-      // sanitize the input to prevent injection attacks
-      jsonSystem.functions = jsonSystem.functions.map(this.sanitizeInput);
-      jsonSystem.callbacks = jsonSystem.callbacks.map(this.sanitizeInput);
-  
-      jsonSystem.functions.forEach(jsonFunction => this.solver.add_function(this.parseFunctionFromJson(jsonFunction, jsonSystem.variables)));
-      
-      jsonSystem.callbacks.forEach(callback => this.solver.add_callback(callback));
+    setSystemFromJson(jsonSystem) {
+        // sanitize the input to prevent injection attacks
+        jsonSystem.functions = jsonSystem.functions.map(this.sanitizeInput);
+        jsonSystem.callbacks = jsonSystem.callbacks.map(this.sanitizeInput);
+    
+        jsonSystem.functions.forEach(jsonFunction => this.addFunction(this.parseFunctionFromJson(jsonFunction, jsonSystem.variables)));
+        
+        jsonSystem.callbacks.forEach(callback => this.addCallback(callback));
 
-      Object.keys(jsonSystem.variables).forEach((varName, index) => {
-          let variable = jsonSystem.variables[varName];
-          if (variable.lowerbound || variable.lowerbound === 0) {
-              this.solver.add_lowerbound(index, variable.lowerbound);
-          }
-          if (variable.upperbound || variable.upperbound === 0) {
-              this.solver.add_upperbound(index, variable.upperbound);
-          }
-      });
-  }
+        Object.keys(jsonSystem.variables).forEach((varName, index) => {
+            let variable = jsonSystem.variables[varName];
+            if (variable.lowerbound || variable.lowerbound === 0) {
+                this.addLowerbound(index, variable.lowerbound);
+            }
+            if (variable.upperbound || variable.upperbound === 0) {
+                this.addUpperbound(index, variable.upperbound);
+            }
+        });
+    }
 
-  generateInitialGuess(variablesMapping) {
-      return Object.keys(variablesMapping).map(varName => variablesMapping[varName].guess);
-  }
+    generateInitialGuess(variablesMapping) {
+        return Object.keys(variablesMapping).map(varName => variablesMapping[varName].guess);
+    }
 
 	run(jsonSystem, max_numb_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16, max_solver_time_in_seconds = 100, initial_trust_region_radius = 1e4, max_trust_region_radius = 1e16, max_num_consecutive_invalid_steps = 5) {
         this.setSystemFromJson(jsonSystem);

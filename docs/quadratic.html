@@ -23,7 +23,7 @@
 </p>
 
 <script type="module">
-	import {Ceres} from 'https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/Ceres-v1.5.3.js'
+	import {Ceres} from 'https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/Ceres-v2.0.0.mjs'
 
 	var fn1 = function f1(x){
 		return (x[0]+10*x[1]-20); //this equation is of the for f1(x) = 0 
@@ -34,11 +34,11 @@
 	}
 	
 	let solver = new Ceres()
-	solver.add_function(fn1) //Add the first equation to the solver.
-	solver.add_function(fn2) //Add the second equation to the solver.
-	//solver.add_callback(c1) //Add the callback to the solver.
-	//solver.add_lowerbound(0,1.6) //Add a lower bound to the x[0] variable
-	//solver.add_upperbound(1,1.7) //Add a upper bound to the x[1] variable
+	solver.addFunction(fn1) //Add the first equation to the solver.
+	solver.addFunction(fn2) //Add the second equation to the solver.
+	//solver.addCallback(c1) //Add the callback to the solver.
+	//solver.addLowerbound(0,1.6) //Add a lower bound to the x[0] variable
+	//solver.addUpperbound(1,1.7) //Add a upper bound to the x[1] variable
 	
 	solver.promise.then(function(result) { 
 		var x_guess = [1,2] //Guess the initial values of the solution.

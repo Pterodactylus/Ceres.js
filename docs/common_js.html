@@ -11,8 +11,7 @@
 <textarea id="demo" rows="40" cols="170">
 </textarea>
 
-<script src="https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/Ceres-v2.0.0.js"></script>
-<script>
+<script src="https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/Ceres-v2.0.0.js">
 
     let jsonSystem = {
         "variables": {
@@ -34,7 +33,7 @@
         ]
     };
 
-	let s = solverCeres.run(jsonSystem);
+	var solver = new Ceres();
 
     x = s.x //assign the calculated solution array to the variable x
 	document.getElementById("demo").value += s.report //Print solver report

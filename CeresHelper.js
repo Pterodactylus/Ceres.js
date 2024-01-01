@@ -143,17 +143,17 @@ export class Ceres {
         jsonSystem.functions = jsonSystem.functions.map(this.sanitizeInput);
         jsonSystem.callbacks = jsonSystem.callbacks.map(this.sanitizeInput);
     
-        jsonSystem.functions.forEach(jsonFunction => this.solver.add_function(this.parseFunctionFromJson(jsonFunction, jsonSystem.variables)));
+        jsonSystem.functions.forEach(jsonFunction => this.addFunction(this.parseFunctionFromJson(jsonFunction, jsonSystem.variables)));
         
-        jsonSystem.callbacks.forEach(callback => this.solver.add_callback(callback));
+        jsonSystem.callbacks.forEach(callback => this.addCallback(callback));
 
         Object.keys(jsonSystem.variables).forEach((varName, index) => {
             let variable = jsonSystem.variables[varName];
             if (variable.lowerbound || variable.lowerbound === 0) {
-                this.solver.add_lowerbound(index, variable.lowerbound);
+                this.addLowerbound(index, variable.lowerbound);
             }
             if (variable.upperbound || variable.upperbound === 0) {
-                this.solver.add_upperbound(index, variable.upperbound);
+                this.addUpperbound(index, variable.upperbound);
             }
         });
     }
