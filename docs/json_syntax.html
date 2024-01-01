@@ -29,13 +29,11 @@
 			"a + 10 * b - 20",
 			"Math.sqrt(5) * a - b * b"
 		],
-		"callbacks": [
-			"console.log(x)"
-		]
+		"callbacks": []
 	};
 
 	async function ceresLoading() {
-		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/Ceres-v2.0.3.mjs');
+		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/Ceres-v2.0.4.mjs');
 		var solver = new Ceres();
 		solver.run(jsonSystem);
 	}

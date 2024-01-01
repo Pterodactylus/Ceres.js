@@ -4565,6 +4565,7 @@ export class Ceres {
 				txt = txt + "\n" + "x" + i + " = " + normalArray[i]
 			}
 			
+      console.log(message)
 			return { success: success, message: message, x: normalArray, report: report+txt}
     })
 	}
@@ -4616,8 +4617,8 @@ export class Ceres {
     }
 
 	run(jsonSystem, max_numb_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16, max_solver_time_in_seconds = 100, initial_trust_region_radius = 1e4, max_trust_region_radius = 1e16, max_num_consecutive_invalid_steps = 5) {
-        this.setSystemFromJson(jsonSystem);
-        let initial_guess = this.generateInitialGuess(jsonSystem.variables);
-		this.solve(initial_guess, max_numb_iterations, parameter_tolerance, function_tolerance, gradient_tolerance, max_solver_time_in_seconds, initial_trust_region_radius, max_trust_region_radius, max_num_consecutive_invalid_steps);
+      this.setSystemFromJson(jsonSystem);
+      let initial_guess = this.generateInitialGuess(jsonSystem.variables);
+		  this.solve(initial_guess, max_numb_iterations, parameter_tolerance, function_tolerance, gradient_tolerance, max_solver_time_in_seconds, initial_trust_region_radius, max_trust_region_radius, max_num_consecutive_invalid_steps);
 	}
 }

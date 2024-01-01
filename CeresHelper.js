@@ -109,6 +109,7 @@ export class Ceres {
 				txt = txt + "\n" + "x" + i + " = " + normalArray[i]
 			}
 			
+			console.log(message)
 			return { success: success, message: message, x: normalArray, report: report+txt}
 		}
 		else{
