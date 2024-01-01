@@ -48,7 +48,9 @@ Recently in 2024 we have introduced a new syntax for the Ceres js engine.
 		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/Ceres-v2.0.2.mjs');
 		var solver = new Ceres();
 		solver.run(jsonSystem);
-	}	
+	}
+
+	ceresLoading()
 
 </script>
 ```
