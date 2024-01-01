@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<script type="module">
-	//	import {Ceres} from 'https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/Ceres-v2.0.0.mjs'
-	</script>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 </head>
 <body>
@@ -17,8 +14,7 @@
 
 
 <script>
-	
-	async function moduleLoading() {
+	async function ceresLoading() {
 		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/Ceres-v2.0.2.mjs');
 
 		var fn1 = function f1(x){
@@ -54,8 +50,7 @@
 			solver.remove() //required to free the memory in C++
 		})
 	}
-	moduleLoading();
-	
+	ceresLoading();
 </script>
 </body>
 </html>

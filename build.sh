@@ -69,7 +69,8 @@ sed -i 's/include(CeresCodeGeneration)/# include(CeresCodeGeneration)/' $bdir/in
 #$bdir/emsdk/upstream/emscripten/emconfigure cmake $cwd/ -DCMAKE_INSTALL_PREFIX=$bdir/installpkg
 $bdir/emsdk/upstream/emscripten/emcmake cmake $cwd/ -DCMAKE_INSTALL_PREFIX=$bdir/installpkg
 $bdir/emsdk/upstream/emscripten/emmake make
-cp --verbose $bdir/Ceres.js/Ceres.js $cwd/Ceres-v1.5.1.js
+cp --verbose $bdir/Ceres.js/Ceres.js $cwd/dist/Ceres-v$VERSION.js
+cp --verbose $bdir/Ceres.js/Ceres.js $cwd/dist/Ceres-latest.mjs
 
 #~/emsdk/upstream/emscripten/emrun --browser "explorer.exe" ~/ceres.js-master/index.html
 #~/emsdk/upstream/emscripten/emrun --browser "explorer.exe" ~/ceres.js-master/test.html

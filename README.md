@@ -6,17 +6,22 @@ Ceres.js is a javascript port of the Ceres solver. Ceres Solver is an open sourc
 Visit our website at https://pterodactylus.github.io/Ceres.js/
 
 ## Installation
-You can install Ceres.js by including the Ceres.js file in your HTML or js code.
+You can install Ceres.js by including the Ceres.js file in your HTML or js code. The best way to do this using the ES6 module system is:
 
 ```HTML
-<script src="https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/Ceres-v2.0.2.mjs"></script>
+<script>
+	async function ceresLoading() {
+		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/Ceres-v2.0.2.mjs');
+
+		//Your Code Here
+	}
+</script>
 ```
 
-## Basic Example
-Ceres.js takes a vector of residual equations that are all equal to zero when the problem is solved. The equations can be non-linear. Here is a basic example.
+## Basic Example (New Syntax)
+Recently in 2024 we have introduced a new syntax for the Ceres js engine.
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/Ceres-v2.0.2.mjs"></script>
 <script>
 
 	let jsonSystem = {
@@ -39,50 +44,59 @@ Ceres.js takes a vector of residual equations that are all equal to zero when th
 		]
 	};
 
-	var solver = new Ceres();
-	solver.run(jsonSystem);
-	
+	async function ceresLoading() {
+		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/Ceres-v2.0.2.mjs');
+		var solver = new Ceres();
+		solver.run(jsonSystem);
+	}	
 
 </script>
 ```
 
+
+## Basic Example (Old Syntax)
+Ceres.js takes a vector of residual equations that are all equal to zero when the problem is solved. The equations can be non-linear. Here is a basic example.
+
 ```html
-<script type="module">
-	import {Ceres} from 'https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/Ceres-v2.0.2.mjs' //Always imported via ES6 import
+<script>
+	async function ceresLoading() {
+		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/Ceres-v2.0.2.mjs'); //Always imported via ES6 import
 
-	var fn1 = function f1(x){
-		return (x[0]+10*x[1]-20); //this equation is of the form f1(x) = 0 
-	}
+		var fn1 = function f1(x){
+			return (x[0]+10*x[1]-20); //this equation is of the form f1(x) = 0 
+		}
 
-	var fn2 = function f2(x){
-		return (Math.sqrt(5)*x[0]-Math.pow(x[1], 2)); //this equation is of the form f2(x) = 0 
-	}
-	var c1 = function callback1(x, evaluate_jacobians, new_evaluation_point){
-			console.log(x);
-	}
+		var fn2 = function f2(x){
+			return (Math.sqrt(5)*x[0]-Math.pow(x[1], 2)); //this equation is of the form f2(x) = 0 
+		}
+		var c1 = function callback1(x, evaluate_jacobians, new_evaluation_point){
+				console.log(x);
+		}
 
-	var solver = new Ceres();
-	solver.promise.then(function(result) { 
-		solver.addFunction(fn1) //Add the first equation to the solver.
-		solver.addFunction(fn2) //Add the second equation to the solver.
-		solver.addCallback(c1) //Add the callback to the solver.
-		//solver.addLowerbound(0,1.6) //Add a lower bound to the x[0] variable
-		//solver.addUpperbound(1,1.7) //Add a upper bound to the x[1] variable
-		var x_guess = [1,2] //Guess the initial values of the solution.
-		var s = solver.solve(x_guess) //Solve the equation
-		var x = s.x //assign the calculated solution array to the variable x
-		console.log(s.report); //Print solver report
-		
-		solver.reset() //enables the solver to run agin without reloading
-		solver.addFunction(fn1) //Add the first equation to the solver.
-		solver.addFunction(fn2) //Add the second equation to the solver.
-		solver.addCallback(c1) //Add the callback to the solver.
-		var x_guess = [2,3] //Guess the initial values of the solution.
-		var s = solver.solve(x_guess) //Solve the equation
-		console.log(s.report); //Print solver report
-		
-		solver.remove() //required to free the memory in C++
-	})
+		var solver = new Ceres();
+		solver.promise.then(function(result) { 
+			solver.addFunction(fn1) //Add the first equation to the solver.
+			solver.addFunction(fn2) //Add the second equation to the solver.
+			solver.addCallback(c1) //Add the callback to the solver.
+			//solver.addLowerbound(0,1.6) //Add a lower bound to the x[0] variable
+			//solver.addUpperbound(1,1.7) //Add a upper bound to the x[1] variable
+			var x_guess = [1,2] //Guess the initial values of the solution.
+			var s = solver.solve(x_guess) //Solve the equation
+			var x = s.x //assign the calculated solution array to the variable x
+			console.log(s.report); //Print solver report
+			
+			solver.reset() //enables the solver to run agin without reloading
+			solver.addFunction(fn1) //Add the first equation to the solver.
+			solver.addFunction(fn2) //Add the second equation to the solver.
+			solver.addCallback(c1) //Add the callback to the solver.
+			var x_guess = [2,3] //Guess the initial values of the solution.
+			var s = solver.solve(x_guess) //Solve the equation
+			console.log(s.report); //Print solver report
+			
+			solver.remove() //required to free the memory in C++
+		})
+	}
+	ceresLoading()
 </script>
 ```
 

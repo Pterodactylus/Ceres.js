@@ -6,38 +6,41 @@
 <body>
 
 <h2>Rosebrock Function</h2>
-<p>This is an example of the solution of the Rosebrock function using Ceres.js</p>
+<p>This is an example of the solution of the Rosenbrock function using Ceres.js</p>
 
 <textarea id="demo" rows="40" cols="170">
 </textarea>
 
-<script type="module">
-	import {CeresGrad} from 'https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/Ceres-v2.0.2.mjs'
+<script>
+	async function ceresLoading() {
+		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/Ceres-v2.0.2.mjs');
 	
-  	var fn1 = function (x){
-		return (1.0 - x[0]) * (1.0 - x[0]) + 100.0 * (x[1] - x[0] * x[0]) * (x[1] - x[0] * x[0]);
+		var fn1 = function (x){
+			return (1.0 - x[0]) * (1.0 - x[0]) + 100.0 * (x[1] - x[0] * x[0]) * (x[1] - x[0] * x[0]);
+		}
+		
+		var c1 = function(x){
+			//console.log("Min Loop xxx")
+			console.log(x+" ")
+			return null
+		}
+		
+		let solver = new Ceres()
+		solver.add_function(fn1) //Add the first equation to the solver.
+		/solver.add_callback(c1) //Add the callback to the solver.
+		//solver.add_lowerbound(0,1.6) //Add a lower bound to the x[0] variable
+		//solver.add_upperbound(1,1.7) //Add a upper bound to the x[1] variable
+		
+		solver.promise.then(function(result) { 
+			var x_guess = [-2, 1.0] //Guess the initial values of the solution.
+			var s = solver.solve(x_guess) //Solve the equation
+			console.log(s)
+			//var x = s.x //assign the calculated solution array to the variable x
+			document.getElementById("demo").value = s.report //Print solver report
+			solver.remove() //required to free the memory in C++
+		})
 	}
-	
-	var c1 = function(x){
-		//console.log("Min Loop xxx")
-		console.log(x+" ")
-		return null
-	}
-	
-	let solver = new CeresGrad()
-	solver.add_function(fn1) //Add the first equation to the solver.
-	/solver.add_callback(c1) //Add the callback to the solver.
-	//solver.add_lowerbound(0,1.6) //Add a lower bound to the x[0] variable
-	//solver.add_upperbound(1,1.7) //Add a upper bound to the x[1] variable
-	
-	solver.promise.then(function(result) { 
-		var x_guess = [-2, 1.0] //Guess the initial values of the solution.
-		var s = solver.solve(x_guess) //Solve the equation
-		console.log(s)
-		//var x = s.x //assign the calculated solution array to the variable x
-		document.getElementById("demo").value = s.report //Print solver report
-		solver.remove() //required to free the memory in C++
-	})
+	ceresLoading()
 </script>
 </body>
 </html>
