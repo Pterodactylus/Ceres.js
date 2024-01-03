@@ -5,9 +5,9 @@
 </head>
 <body>
 
-<h2>Powell Function</h2>
+<h2>JSON Syntax Demo Function</h2>
 <p>This is an example using the JSON syntax with Ceres.js</p>
-<div><button type="button" onclick="ceresLoading">Click Me!</button> </div>
+<div><button type="button" onclick="ceresLoading()">Click Me!</button> </div>
 
 <textarea id="demo" rows="40" cols="170">
 </textarea>
@@ -34,8 +34,9 @@
 
 	async function ceresLoading() {
 		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/Ceres-v2.0.4.mjs');
-		var solver = new Ceres();
-		solver.run(jsonSystem);
+		let solver = new Ceres();
+		let results = solver.run(jsonSystem);
+		document.getElementById("demo").value = results.report //Print solver report
 	}
 	//window.onload = function() {
 	//	ceresLoading();  //example function call.
