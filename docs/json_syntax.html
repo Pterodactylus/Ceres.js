@@ -33,9 +33,9 @@
 	};
 
 	async function ceresLoading() {
-		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/Ceres-v2.0.4.mjs');
+		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/Ceres-v2.0.5.mjs');
 		let solver = new Ceres();
-		let results = solver.run(jsonSystem);
+		let results = await solver.run(jsonSystem);
 		document.getElementById("demo").value = results.report //Print solver report
 	}
 	//window.onload = function() {

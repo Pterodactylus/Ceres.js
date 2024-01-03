@@ -4538,35 +4538,36 @@ export class Ceres {
 		}
 	}
 	// Method
-	solve(xi, max_numb_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16, max_solver_time_in_seconds = 100, initial_trust_region_radius = 1e4, max_trust_region_radius = 1e16, max_num_consecutive_invalid_steps = 5) {
-    Promise.all([this.promise]).then(results => {
-      //if(this.varLength <= this.maxLength ){this.varLength = this.fxn.length}
-			if(this.varLength <= this.maxLength ){this.varLength = xi.length}
-			else{throw "Max number of vars exceeded"}
-			
-			this.load_fxns()
-			
-			for(let i = 0; i < xi.length; i++){
-				this.dataHeap[i] = xi[i];
-			}
-			this.instance.setup_x(this.dataHeap.byteOffset, this.varLength);
-			let max_num_iterations = max_numb_iterations
-			let parameter_tol = parameter_tolerance
-			let function_tol = function_tolerance
-			let gradient_tol = gradient_tolerance
-			let success = this.instance.solve(max_num_iterations, parameter_tol, function_tol, gradient_tol, max_solver_time_in_seconds, initial_trust_region_radius, max_trust_region_radius, max_num_consecutive_invalid_steps);
-			let report = this.instance.get_report();
-			let message = this.instance.get_message();
-			//console.log(report)
-			let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.varLength)
-			let normalArray = [].slice.call(x);
-			let txt = "";
-			for(let i=0; i<normalArray.length; i++){
-				txt = txt + "\n" + "x" + i + " = " + normalArray[i]
-			}
-			
-			return { success: success, message: message, x: normalArray, report: report+txt}
-    })
+	async solve(xi, max_numb_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16, max_solver_time_in_seconds = 100, initial_trust_region_radius = 1e4, max_trust_region_radius = 1e16, max_num_consecutive_invalid_steps = 5) {
+    await this.promise
+    
+    //if(this.varLength <= this.maxLength ){this.varLength = this.fxn.length}
+    if(this.varLength <= this.maxLength ){this.varLength = xi.length}
+    else{throw "Max number of vars exceeded"}
+    
+    this.load_fxns()
+    
+    for(let i = 0; i < xi.length; i++){
+      this.dataHeap[i] = xi[i];
+    }
+    this.instance.setup_x(this.dataHeap.byteOffset, this.varLength);
+    let max_num_iterations = max_numb_iterations
+    let parameter_tol = parameter_tolerance
+    let function_tol = function_tolerance
+    let gradient_tol = gradient_tolerance
+    let success = this.instance.solve(max_num_iterations, parameter_tol, function_tol, gradient_tol, max_solver_time_in_seconds, initial_trust_region_radius, max_trust_region_radius, max_num_consecutive_invalid_steps);
+    let report = this.instance.get_report();
+    let message = this.instance.get_message();
+    //console.log(report)
+    let x = new Float64Array(this.dataHeap.buffer, this.dataHeap.byteOffset, this.varLength)
+    let normalArray = [].slice.call(x);
+    let txt = "";
+    for(let i=0; i<normalArray.length; i++){
+      txt = txt + "\n" + "x" + i + " = " + normalArray[i]
+    }
+    
+    return { success: success, message: message, x: normalArray, report: report+txt}
+    
 	}
 
 	remove(){
@@ -4615,9 +4616,9 @@ export class Ceres {
         return Object.keys(variablesMapping).map(varName => variablesMapping[varName].guess);
     }
 
-	run(jsonSystem, max_numb_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16, max_solver_time_in_seconds = 100, initial_trust_region_radius = 1e4, max_trust_region_radius = 1e16, max_num_consecutive_invalid_steps = 5) {
+	async run(jsonSystem, max_numb_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16, max_solver_time_in_seconds = 100, initial_trust_region_radius = 1e4, max_trust_region_radius = 1e16, max_num_consecutive_invalid_steps = 5) {
       this.setSystemFromJson(jsonSystem);
       let initial_guess = this.generateInitialGuess(jsonSystem.variables);
-		  return this.solve(initial_guess, max_numb_iterations, parameter_tolerance, function_tolerance, gradient_tolerance, max_solver_time_in_seconds, initial_trust_region_radius, max_trust_region_radius, max_num_consecutive_invalid_steps);
+		  return results = await this.solve(initial_guess, max_numb_iterations, parameter_tolerance, function_tolerance, gradient_tolerance, max_solver_time_in_seconds, initial_trust_region_radius, max_trust_region_radius, max_num_consecutive_invalid_steps);
 	}
 }
