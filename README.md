@@ -11,10 +11,11 @@ You can install Ceres.js by including the Ceres.js file in your HTML or js code.
 ```HTML
 <script>
 	async function ceresLoading() {
-		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/Ceres-v2.0.2.mjs');
+		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.js');
 
 		//Your Code Here
 	}
+	ceresLoading()
 </script>
 ```
 
@@ -27,25 +28,22 @@ Recently in 2024 we have introduced a new syntax for the Ceres js engine.
 	let jsonSystem = {
 		"variables": {
 			"a": {
-				"lowerbound": 1.6,
+				"lowerbound": -3,
 				"guess": 1,
 			}, 
 			"b": {
-				"upperbound": 1.7,
+				"upperbound": 5,
 				"guess": 2,
 			},
 		},
 		"functions": [
 			"a + 10 * b - 20",
-			"Math.sqrt(5) * a - b * b"
-		],
-		"callbacks": [
-			"console.log(x)"
+			"sqrt(5) * a - b * b"
 		]
 	};
 
 	async function ceresLoading() {
-		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/Ceres-v2.0.2.mjs');
+		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.js');
 		var solver = new Ceres();
 		solver.run(jsonSystem);
 	}
@@ -62,7 +60,7 @@ Ceres.js takes a vector of residual equations that are all equal to zero when th
 ```html
 <script>
 	async function ceresLoading() {
-		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/Ceres-v2.0.2.mjs'); //Always imported via ES6 import
+		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.js'); //Always imported via ES6 import
 
 		var fn1 = function f1(x){
 			return (x[0]+10*x[1]-20); //this equation is of the form f1(x) = 0 
