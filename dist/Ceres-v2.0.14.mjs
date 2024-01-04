@@ -4455,11 +4455,7 @@ else if (typeof exports === 'object')
   exports["CeresModule"] = CeresModule;
 
 
-// some route file
-import { create, all } from 'https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.2.1/math.min.js'
-
-const config = { }
-const math = create(all, config)
+import * as math from 'https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.2.1/math.min.js';
 
 //Ceres Helper JS
 
