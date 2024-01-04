@@ -4456,7 +4456,7 @@ else if (typeof exports === 'object')
 
 
 // some route file
-import math from 'https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.2.1/math.min.js'
+import {math} from 'https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.2.1/math.min.js'
 
 //Ceres Helper JS
 
