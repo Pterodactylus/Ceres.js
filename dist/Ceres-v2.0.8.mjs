@@ -4584,7 +4584,7 @@ export class Ceres {
             parsedFunction = parsedFunction.replace(regex, `x[${index}]`);
         });
 
-        return new Function('x', `return ${parsedFunction}`);
+        return new Function('x', `return math.evaluate(${parsedFunction})`);
     }
 
 	sanitizeInput(input) {
@@ -4614,6 +4614,7 @@ export class Ceres {
     }
 
 	async run(jsonSystem, max_numb_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16, max_solver_time_in_seconds = 100, initial_trust_region_radius = 1e4, max_trust_region_radius = 1e16, max_num_consecutive_invalid_steps = 5) {
+      const {math} = await import("https://cdn.jsdelivr.net/npm/mathjs@12.2.1/lib/browser/math.min.js"); //required for parsing expressions.
       this.setSystemFromJson(jsonSystem);
       let initial_guess = this.generateInitialGuess(jsonSystem.variables);
 		  const results = await this.solve(initial_guess, max_numb_iterations, parameter_tolerance, function_tolerance, gradient_tolerance, max_solver_time_in_seconds, initial_trust_region_radius, max_trust_region_radius, max_num_consecutive_invalid_steps);
