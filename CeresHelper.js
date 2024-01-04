@@ -118,7 +118,7 @@ export class Ceres {
 		this.instance.delete();
 	}
 
-	parseFunctionFromJson(jsonFunction, variablesMapping) {
+	static parseFunctionFromJson(jsonFunction, variablesMapping) {
         let parsedFunction = jsonFunction;
 
         // Replace variables with their corresponding indexed representations
@@ -127,19 +127,49 @@ export class Ceres {
             parsedFunction = parsedFunction.replace(regex, `x[${index}]`);
         });
 
-        return new Function('x', `return ${parsedFunction}`);
+        return parsedFunction;
     }
 
-	sanitizeInput(input) {
-        // Return input without any potentially harmful JavaScript string
-        return input.replace(/[<>]/g, "");
-    }
+  	static sanitizeInput(mathExpression) {
+		const validExpression = /^[0-9\s+\-/*()\[\]^sincoxetalaqrtPi.E]*$/;
+		const validStructure = /^[\d\s+\-/*()\[\]^]*$/;
+
+		if (!validExpression.test(mathExpression) || !validStructure.test(mathExpression.replace(/sin|cos|tan|cot|sec|csc|log|ln|sqrt|exp|abs|x|E|Pi/g,''))){
+			throw new Error(`Invalid mathematical expression: ${mathExpression}`);
+		}
+		
+		mathExpression = mathExpression.replace('^', '**');
+
+		// Translation to Javascript functions
+		mathExpression = mathExpression
+		.replace(/sin/g, 'Math.sin')
+		.replace(/cos/g, 'Math.cos')
+		.replace(/tan/g, 'Math.tan')
+		.replace(/cot/g, 'Math.cot')
+		.replace(/sec/g, 'Math.sec')
+		.replace(/csc/g, 'Math.csc')
+		.replace(/log/g, 'Math.log10')
+		.replace(/ln/g, 'Math.log')
+		.replace(/sqrt/g, 'Math.sqrt')
+		.replace(/exp/g, 'Math.exp')
+		.replace(/abs/g, 'Math.abs')
+		.replace(/Pi/g, 'Math.PI')
+		.replace(/E/g, 'Math.E');
+		
+    	return mathExpression;
+	}
 
     setSystemFromJson(jsonSystem) {
+        
+        //console.log(jsonSystem.functions)
+        let variables = jsonSystem.variables
+        jsonSystem.functions = jsonSystem.functions.map(function(x) { return Ceres.parseFunctionFromJson(x, variables); });
+        
         // sanitize the input to prevent injection attacks
-        jsonSystem.functions = jsonSystem.functions.map(this.sanitizeInput);
+        jsonSystem.functions = jsonSystem.functions.map(Ceres.sanitizeInput);
+        //console.log(jsonSystem.functions)
     
-        jsonSystem.functions.forEach(jsonFunction => this.addFunction(this.parseFunctionFromJson(jsonFunction, jsonSystem.variables)));
+        jsonSystem.functions.forEach(jsonFunction => this.addFunction(new Function('x', `return ${jsonFunction}`)));
 
         Object.keys(jsonSystem.variables).forEach((varName, index) => {
             let variable = jsonSystem.variables[varName];
@@ -150,10 +180,6 @@ export class Ceres {
                 this.addUpperbound(index, variable.upperbound);
             }
         });
-    }
-
-    generateInitialGuess(variablesMapping) {
-        return Object.keys(variablesMapping).map(varName => variablesMapping[varName].guess);
     }
 
 	async run(jsonSystem, max_numb_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16, max_solver_time_in_seconds = 100, initial_trust_region_radius = 1e4, max_trust_region_radius = 1e16, max_num_consecutive_invalid_steps = 5) {
