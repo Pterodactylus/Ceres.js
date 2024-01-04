@@ -4595,11 +4595,8 @@ export class Ceres {
     setSystemFromJson(jsonSystem) {
         // sanitize the input to prevent injection attacks
         jsonSystem.functions = jsonSystem.functions.map(this.sanitizeInput);
-        jsonSystem.callbacks = jsonSystem.callbacks.map(this.sanitizeInput);
     
         jsonSystem.functions.forEach(jsonFunction => this.addFunction(this.parseFunctionFromJson(jsonFunction, jsonSystem.variables)));
-        
-        jsonSystem.callbacks.forEach(callback => this.addCallback(callback));
 
         Object.keys(jsonSystem.variables).forEach((varName, index) => {
             let variable = jsonSystem.variables[varName];
