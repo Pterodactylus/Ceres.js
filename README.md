@@ -75,27 +75,16 @@ Ceres.js takes a vector of residual equations that are all equal to zero when th
 		}
 
 		var solver = new Ceres();
-		solver.promise.then(function(result) { 
-			solver.addFunction(fn1) //Add the first equation to the solver.
-			solver.addFunction(fn2) //Add the second equation to the solver.
-			solver.addCallback(c1) //Add the callback to the solver.
-			//solver.addLowerbound(0,1.6) //Add a lower bound to the x[0] variable
-			//solver.addUpperbound(1,1.7) //Add a upper bound to the x[1] variable
-			var x_guess = [1,2] //Guess the initial values of the solution.
-			var s = solver.solve(x_guess) //Solve the equation
-			var x = s.x //assign the calculated solution array to the variable x
-			console.log(s.report); //Print solver report
-			
-			solver.reset() //enables the solver to run agin without reloading
-			solver.addFunction(fn1) //Add the first equation to the solver.
-			solver.addFunction(fn2) //Add the second equation to the solver.
-			solver.addCallback(c1) //Add the callback to the solver.
-			var x_guess = [2,3] //Guess the initial values of the solution.
-			var s = solver.solve(x_guess) //Solve the equation
-			console.log(s.report); //Print solver report
-			
-			solver.remove() //required to free the memory in C++
-		})
+		solver.addFunction(fn1) //Add the first equation to the solver.
+		solver.addFunction(fn2) //Add the second equation to the solver.
+		solver.addCallback(c1) //Add the callback to the solver.
+		//solver.addLowerbound(0,1.6) //Add a lower bound to the x[0] variable
+		//solver.addUpperbound(1,1.7) //Add a upper bound to the x[1] variable
+		var x_guess = [1,2] //Guess the initial values of the solution.
+		let s = await solver.solve(x_guess) //Solve the equation
+		var x = s.x //assign the calculated solution array to the variable x
+		console.log(s.report); //Print solver report
+		solver.remove() //required to free the memory in C++
 	}
 	ceresLoading()
 </script>
