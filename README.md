@@ -11,7 +11,7 @@ You can install Ceres.js by including the Ceres.js file in your HTML or js code.
 ```HTML
 <script>
 	async function ceresLoading() {
-		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.js');
+		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.min.js');
 
 		//Your Code Here
 	}
@@ -43,7 +43,7 @@ Recently in 2024 we have introduced a new syntax for the Ceres js engine.
 	};
 
 	async function ceresLoading() {
-		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.js');
+		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.min.js');
 		var solver = new Ceres();
 		solver.run(jsonSystem);
 	}
@@ -60,7 +60,7 @@ Ceres.js takes a vector of residual equations that are all equal to zero when th
 ```html
 <script>
 	async function ceresLoading() {
-		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.js'); //Always imported via ES6 import
+		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.min.js'); //Always imported via ES6 import
 
 		var fn1 = function f1(x){
 			return (x[0]+10*x[1]-20); //this equation is of the form f1(x) = 0 

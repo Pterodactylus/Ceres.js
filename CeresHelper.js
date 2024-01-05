@@ -163,13 +163,13 @@ export class Ceres {
         
         //console.log(jsonSystem.functions)
         let variables = jsonSystem.variables
-        jsonSystem.functions = jsonSystem.functions.map(function(x) { return Ceres.parseFunctionFromJson(x, variables); });
+        let jsonFunctions = jsonSystem.functions.map(function(x) { return Ceres.parseFunctionFromJson(x, variables); });
         
         // sanitize the input to prevent injection attacks
-        jsonSystem.functions = jsonSystem.functions.map(Ceres.sanitizeInput);
+        jsonFunctions = jsonFunctions.map(Ceres.sanitizeInput);
         //console.log(jsonSystem.functions)
     
-        jsonSystem.functions.forEach(jsonFunction => this.addFunction(new Function('x', `return ${jsonFunction}`)));
+        jsonFunctions.forEach(jsonFunction => this.addFunction(new Function('x', `return ${jsonFunction}`)));
 
         Object.keys(jsonSystem.variables).forEach((varName, index) => {
             let variable = jsonSystem.variables[varName];
@@ -180,6 +180,10 @@ export class Ceres {
                 this.addUpperbound(index, variable.upperbound);
             }
         });
+    }
+
+	generateInitialGuess(variablesMapping) {
+        return Object.keys(variablesMapping).map(varName => variablesMapping[varName].guess);
     }
 
 	async run(jsonSystem, max_numb_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16, max_solver_time_in_seconds = 100, initial_trust_region_radius = 1e4, max_trust_region_radius = 1e16, max_num_consecutive_invalid_steps = 5) {

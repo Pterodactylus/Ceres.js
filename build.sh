@@ -1,11 +1,14 @@
 #!/bin/bash
+
+set -x
+
 #cd ~/Ceres.js
 cwd=$(pwd)
 bdir=$(pwd)/build
 
 echo $bdir
 # Get the emsdk repo
-git clone https://github.com/emscripten-core/emsdk.git $bdir/emsdk
+git clone -b "3.1.51" https://github.com/emscripten-core/emsdk.git $bdir/emsdk
 
 # Enter that directory
 cd $bdir/emsdk
@@ -24,8 +27,8 @@ source ./emsdk_env.sh
 
 mkdir $bdir/packages
 cd $bdir/packages
-git clone -b "2.0.0" https://ceres-solver.googlesource.com/ceres-solver $bdir/packages/ceres-solver
-git clone https://gitlab.com/libeigen/eigen.git $bdir/packages/eigen
+git clone -b "2.2.0" https://ceres-solver.googlesource.com/ceres-solver $bdir/packages/ceres-solver
+git clone -b "3.4.0" https://gitlab.com/libeigen/eigen.git $bdir/packages/eigen
 
 #rm -rf ~/ceres.js-master/buildpkg
 mkdir $bdir/buildpkg
@@ -46,7 +49,7 @@ mkdir $bdir/buildpkg/eigen
 cd $bdir/buildpkg/eigen
 #$bdir/emsdk/upstream/emscripten/emconfigure cmake $bdir/packages/eigen -DCMAKE_INSTALL_PREFIX=$bdir/installpkg
 $bdir/emsdk/upstream/emscripten/emcmake cmake $bdir/packages/eigen -DCMAKE_INSTALL_PREFIX=$bdir/installpkg
-$bdir/emsdk/upstream/emscripten/emmake make 
+$bdir/emsdk/upstream/emscripten/emmake make
 make -j4 install
 
 #rm -rf ~/ceres.js-master/buildpkg/ceres-solver
@@ -64,11 +67,10 @@ make -j4 install
 mkdir $bdir/Ceres.js
 cd $bdir/Ceres.js
 
-#This line is returning an error due to problems with the ceres solver. The sed command is a workaround.
-sed -i 's/include(CeresCodeGeneration)/# include(CeresCodeGeneration)/' $bdir/installpkg/lib/cmake/Ceres/CeresConfig.cmake
 #$bdir/emsdk/upstream/emscripten/emconfigure cmake $cwd/ -DCMAKE_INSTALL_PREFIX=$bdir/installpkg
 $bdir/emsdk/upstream/emscripten/emcmake cmake $cwd/ -DCMAKE_INSTALL_PREFIX=$bdir/installpkg
 $bdir/emsdk/upstream/emscripten/emmake make
+cat $cwd/CeresHelper.js >> $bdir/Ceres.js/Ceres.js
 cp --verbose $bdir/Ceres.js/Ceres.js $cwd/dist/ceres.js
 
 #~/emsdk/upstream/emscripten/emrun --browser "explorer.exe" ~/ceres.js-master/index.html
