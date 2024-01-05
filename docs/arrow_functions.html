@@ -34,7 +34,7 @@
 		a = -2
 		b = 1
 		c = 9
-		solver.add_function((x) => f(x, a, b, c)) //Add the first equation to the solver.
+		solver.addFunction((x) => f(x, a, b, c)) //Add the first equation to the solver.
 		x_guess = [1] //Guess the initial values of the solution.
 		s = await solver.solve(x_guess) //Solve the equation
 		x = s.x //assign the calculated solution array to the variable x
