@@ -21,14 +21,13 @@
 		
 		let solver = new Ceres()
 		solver.add_function(fn1) //Add the first equation to the solver.
-		
-		solver.promise.then(function(result) { 
-			var x_guess = [1] //Guess the initial values of the solution.
-			var s = solver.solve(x_guess) //Solve the equation
-			var x = s.x //assign the calculated solution array to the variable x
-			document.getElementById("demo").value = s.report //Print solver report
-			solver.remove() //required to free the memory in C++
-		})
+		var x_guess = [1] //Guess the initial values of the solution.
+		var s = solver.solve(x_guess) //Solve the equation
+		let s = await solver.solve(x_guess) //Solve the equation
+		var x = s.x //assign the calculated solution array to the variable x
+		document.getElementById("demo").value = s.report //Print solver report
+		solver.remove() //required to free the memory in C++
+							
 	}
 	ceresLoading()
 </script>

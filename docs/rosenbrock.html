@@ -26,19 +26,19 @@
 		}
 		
 		let solver = new Ceres()
-		solver.add_function(fn1) //Add the first equation to the solver.
-		/solver.add_callback(c1) //Add the callback to the solver.
-		//solver.add_lowerbound(0,1.6) //Add a lower bound to the x[0] variable
-		//solver.add_upperbound(1,1.7) //Add a upper bound to the x[1] variable
+		solver.addFunction(fn1) //Add the first equation to the solver.
+		/solver.addCallback(c1) //Add the callback to the solver.
+		//solver.addLowerbound(0,1.6) //Add a lower bound to the x[0] variable
+		//solver.addUpperbound(1,1.7) //Add a upper bound to the x[1] variable
 		
-		solver.promise.then(function(result) { 
-			var x_guess = [-2, 1.0] //Guess the initial values of the solution.
-			var s = solver.solve(x_guess) //Solve the equation
-			console.log(s)
-			//var x = s.x //assign the calculated solution array to the variable x
-			document.getElementById("demo").value = s.report //Print solver report
-			solver.remove() //required to free the memory in C++
-		})
+		
+		var x_guess = [-2, 1.0] //Guess the initial values of the solution.
+		let s = await solver.solve(x_guess) //Solve the equation
+		console.log(s)
+		//var x = s.x //assign the calculated solution array to the variable x
+		document.getElementById("demo").value = s.report //Print solver report
+		solver.remove() //required to free the memory in C++
+		
 	}
 	ceresLoading()
 </script>

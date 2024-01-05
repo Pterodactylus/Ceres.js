@@ -7,7 +7,7 @@
 
 <h2>JSON Syntax Demo Function</h2>
 <p>This is an example using the JSON syntax with Ceres.js</p>
-<div><button type="button" onclick="ceresSolve()">Solve</button> </div>
+<div><button type="button" onclick="ceresSolveJSON()">Solve JSON</button> <button type="button" onclick="ceresSolve()">Solve</button></div>
 
 <textarea id="demo" rows="40" cols="170">
 </textarea>
@@ -31,12 +31,43 @@
 		]
 	};
 
-	async function ceresSolve() {
+	async function ceresSolveJSON() {
 		const {Ceres} = await import('../dist/ceres.js');
 		let solver = new Ceres();
 		let results = await solver.run(jsonSystem);
 		document.getElementById("demo").value = results.report //Print solver report
 	}
+	
+
+	async function ceresSolve() {
+		const {Ceres} = await import('../dist/ceres.js');
+		let solver = new Ceres();
+	
+		var fn1 = function (x){
+			return (1.0 - x[0]) * (1.0 - x[0]) + 100.0 * (x[1] - x[0] * x[0]) * (x[1] - x[0] * x[0]);
+		}
+		
+		var c1 = function(x){
+			//console.log("Min Loop xxx")
+			console.log(x+" ")
+			return null
+		}
+		
+		solver.addFunction(fn1) //Add the first equation to the solver.
+		solver.addCallback(c1) //Add the callback to the solver.
+		//solver.addLowerbound(0,1.6) //Add a lower bound to the x[0] variable
+		//solver.addUpperbound(1,1.7) //Add a upper bound to the x[1] variable
+		
+		
+		var x_guess = [-2, 1.0] //Guess the initial values of the solution.
+		let results = await solver.solve(x_guess) //Solve the equation
+		//console.log(results)
+		document.getElementById("demo").value = results.report //Print solver report
+		solver.remove() //required to free the memory in C++
+
+
+	}
+	ceresSolve()
 
 </script>
 

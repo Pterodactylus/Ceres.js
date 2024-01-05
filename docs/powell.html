@@ -14,7 +14,7 @@
 
 
 <script>
-	async function ceresLoading() {
+	async function ceresSolve() {
 		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.min.js');
 
 		var fn1 = function f1(x){
@@ -42,15 +42,14 @@
 		//solver.addLowerbound(0,1.6) //Add a lower bound to the x[0] variable
 		//solver.addUpperbound(1,1.7) //Add a upper bound to the x[1] variable
 		
-		solver.promise.then(function(result) { 
-			var x_guess = [1,2,3,4] //Guess the initial values of the solution.
-			var s = solver.solve(x_guess) //Solve the equation
-			var x = s.x //assign the calculated solution array to the variable x
-			document.getElementById("demo").value = s.report //Print solver report
-			solver.remove() //required to free the memory in C++
-		})
+		var x_guess = [1,2,3,4] //Guess the initial values of the solution.
+		let s = await solver.solve(x_guess) //Solve the equation
+		var x = s.x //assign the calculated solution array to the variable x
+		document.getElementById("demo").value = s.report //Print solver report
+		solver.remove() //required to free the memory in C++
+		
 	}
-	ceresLoading();
+	ceresSolve();
 </script>
 </body>
 </html>

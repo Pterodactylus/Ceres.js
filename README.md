@@ -25,26 +25,27 @@ Recently in 2024 we have introduced a new syntax for the Ceres js engine.
 ```html
 <script>
 
-	let jsonSystem = {
-		"variables": {
-			"a": {
-				"lowerbound": -3,
-				"guess": 1,
-			}, 
-			"b": {
-				"upperbound": 5,
-				"guess": 2,
-			},
-		},
-		"functions": [
-			"a + 10 * b - 20",
-			"sqrt(5) * a - b * b"
-		]
-	};
-
 	async function ceresLoading() {
 		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.min.js');
 		var solver = new Ceres();
+
+		let jsonSystem = {
+			"variables": {
+				"a": {
+					"lowerbound": -3,
+					"guess": 1,
+				}, 
+				"b": {
+					"upperbound": 5,
+					"guess": 2,
+				},
+			},
+			"functions": [
+				"a + 10 * b - 20",
+				"sqrt(5) * a - b * b"
+			]
+		};
+		
 		solver.run(jsonSystem);
 	}
 

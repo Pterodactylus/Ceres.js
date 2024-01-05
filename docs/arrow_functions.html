@@ -21,28 +21,26 @@
 
 		let solver = new Ceres()
 
-		solver.promise.then(function(result) { //A promise is necessary to ensure that the Ceres class is loaded.
-			let a = -1
-			let b = 0
-			let c = 9
-			solver.addFunction((x) => f(x, a, b, c)) //Add the first equation to the solver.
-			var x_guess = [1] //Guess the initial values of the solution.
-			var s = solver.solve(x_guess) //Solve the equation
-			var x = s.x //assign the calculated solution array to the variable x
-			document.getElementById("demo").value = s.report + "\n\n" //Print solver report
-			solver.reset() // erases the loaded functions and resets the solver.
+		let a = -1
+		let b = 0
+		let c = 9
+		solver.addFunction((x) => f(x, a, b, c)) //Add the first equation to the solver.
+		var x_guess = [1] //Guess the initial values of the solution.
+		let s = await solver.solve(x_guess) //Solve the equation
+		var x = s.x //assign the calculated solution array to the variable x
+		document.getElementById("demo").value = s.report + "\n\n" //Print solver report
+		solver.reset() // erases the loaded functions and resets the solver.
 
-			a = -2
-			b = 1
-			c = 9
-			solver.add_function((x) => f(x, a, b, c)) //Add the first equation to the solver.
-			x_guess = [1] //Guess the initial values of the solution.
-			s = solver.solve(x_guess) //Solve the equation
-			x = s.x //assign the calculated solution array to the variable x
-			document.getElementById("demo").value += s.report //Print solver report
+		a = -2
+		b = 1
+		c = 9
+		solver.add_function((x) => f(x, a, b, c)) //Add the first equation to the solver.
+		x_guess = [1] //Guess the initial values of the solution.
+		s = await solver.solve(x_guess) //Solve the equation
+		x = s.x //assign the calculated solution array to the variable x
+		document.getElementById("demo").value += s.report //Print solver report
 
-			solver.remove() //required to free the memory in C++
-		})
+		solver.remove() //required to free the memory in C++
 	}
 	ceresLoading()
 </script>
