@@ -54,6 +54,7 @@ jobs:
         source ./emsdk_env.sh
             
     - name: Make & Install Eigen
+      shell: bash
       run: |
         cd $bdir/buildpkg/eigen
         $bdir/emsdk/upstream/emscripten/emcmake cmake $bdir/packages/eigen -DCMAKE_INSTALL_PREFIX=$bdir/installpkg
@@ -68,6 +69,7 @@ jobs:
         sparse-checkout-cone-mode: false
     
     - name: Make & Install Ceres Solver
+      shell: bash
       run: |
         cd $bdir/buildpkg/ceres-solver
         cp --verbose $cwd/CMakeListsCeres.txt $bdir/packages/ceres-solver/CMakeLists.txt
