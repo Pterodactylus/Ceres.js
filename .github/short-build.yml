@@ -1,0 +1,23 @@
+# Sample workflow for building and deploying a Jekyll site to GitHub Pages
+name: Build Ceres from c++ source
+
+on:
+  push:
+    branches: [ $default-branch ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout
+        uses: actions/checkout@v4
+
+    - name: Build Ceres.js
+      shell: bash
+      run: bash build.sh
