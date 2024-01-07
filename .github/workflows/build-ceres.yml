@@ -1,5 +1,5 @@
 # Sample workflow for building and deploying a Jekyll site to GitHub Pages
-name: Build Ceres from c++ source
+name: Build Ceres.js 
 
 on:
   push:
@@ -10,69 +10,12 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-
-    - name: Setup Environment & Folders
-      shell: bash
-      run: | 
-        echo "cwd=$(pwd)" >> $GITHUB_ENV
-        echo "bdir=$(pwd)/build" >> $GITHUB_ENV
-        sudo mkdir $bdir/packages
-        sudo mkdir $bdir/buildpkg
-        sudo mkdir $bdir/installpkg
-        sudo mkdir $bdir/buildpkg/eigen
-        sudo mkdir $bdir/buildpkg/ceres-solver
-
-    - name: Clone Emscripten
-      shell: bash
-      run: git clone -b "3.1.51" https://github.com/emscripten-core/emsdk.git $bdir/emsdk
-
-    - name: Clone Ceres
-      shell: bash
-      run: git clone -b "2.2.0" https://ceres-solver.googlesource.com/ceres-solver $bdir/packages/ceres-solver
-      
-    - name: Clone Eigen
-      shell: bash
-      run: git clone -b "3.4.0" https://gitlab.com/libeigen/eigen.git $bdir/packages/eigen
-
-    - name: Activate Emscripten
-      shell: bash
-      run: |
-        #Enter that directory
-        cd $bdir/emsdk
-        
-        # Download and install the latest SDK tools.
-        $bdir/emsdk/upstream/emscripten/em++ -v || ./emsdk install latest
-        
-        # Make the "latest" SDK "active" for the current user. (writes ~/.emscripten file)
-        ./emsdk activate latest
-        
-        # Activate PATH and other environment variables in the current terminal
-        source ./emsdk_env.sh
-            
-    - name: Make & Install Eigen
-      shell: bash
-      run: |
-        ls $bdir
-        ls $bdir/buildpkg
-        cd $bdir/buildpkg/eigen
-        $bdir/emsdk/upstream/emscripten/emcmake cmake $bdir/packages/eigen -DCMAKE_INSTALL_PREFIX=$bdir/installpkg
-        $bdir/emsdk/upstream/emscripten/emmake make
-        make -j4 install
-
-    - name: Checkout Ceres Cmake File
+    - name: Checkout
       uses: actions/checkout@v4
-      with:
-        sparse-checkout: CMakeListsCeres.txt
-        sparse-checkout-cone-mode: false
-    
-    - name: Make & Install Ceres Solver
+
+    - name: Build Ceres.js
       shell: bash
-      run: |
-        cd $bdir/buildpkg/ceres-solver
-        cp --verbose $cwd/CMakeListsCeres.txt $bdir/packages/ceres-solver/CMakeLists.txt
-        $bdir/emsdk/upstream/emscripten/emcmake cmake $bdir/packages/ceres-solver -DCMAKE_INSTALL_PREFIX=$bdir/installpkg -DEigen3_DIR=$bdir/installpkg/share/eigen3/cmake
-        make -j4 install
+      run: bash build.sh
