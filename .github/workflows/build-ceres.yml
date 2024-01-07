@@ -14,18 +14,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Download Emscripten
-      run: |
-        cwd=$(pwd)
-        bdir=$(pwd)/build
+#    - name: Checkout
+#      uses: actions/checkout@v4
+    
+    - name: Setup Environment
+      shell: bash
+      run: | 
+        echo "cwd=$(pwd)" >> $GITHUB_ENV
+        echo "bdir=$(pwd)/build >> $GITHUB_ENV
 
-        echo $bdir
-        # Get the emsdk repo
-        git clone -b "3.1.51" https://github.com/emscripten-core/emsdk.git $bdir/emsdk
+
+    - name: Clone Emscripten
+      shell: bash  
+      run: git clone -b "3.1.51" https://github.com/emscripten-core/emsdk.git $bdir/emsdk
 
     - name: Activate Emscripten
+      shell: bash
       run: |
         #Enter that directory
         cd $bdir/emsdk
