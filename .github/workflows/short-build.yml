@@ -1,5 +1,5 @@
 # Sample workflow for building and deploying a Jekyll site to GitHub Pages
-name: Build Ceres from c++ source
+name: Build Ceres.js BASH
 
 on:
   push:
