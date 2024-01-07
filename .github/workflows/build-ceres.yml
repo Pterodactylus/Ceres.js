@@ -14,8 +14,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+#    - name: Checkout
+#      uses: actions/checkout@v4
     
     - name: Setup Environment & Folders
       shell: bash
@@ -62,6 +62,13 @@ jobs:
         $bdir/emsdk/upstream/emscripten/emmake make
         make -j4 install
 
+    - name: Checkout Ceres Cmake File
+      uses: actions/checkout@v4
+      with:
+        sparse-checkout: |
+          CMakeListsCeres.txt
+        sparse-checkout-cone-mode: false
+    
     - name: Make & Install Ceres Solver
       run: |
         cd $bdir/buildpkg/ceres-solver
