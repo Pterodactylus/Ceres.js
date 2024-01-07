@@ -17,11 +17,12 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Download Emscripten
-      run: >
+      run: |
         cwd=$(pwd)
         bdir=$(pwd)/build
 
         echo $bdir
+        # Get the emsdk repo
         git clone -b "3.1.51" https://github.com/emscripten-core/emsdk.git $bdir/emsdk
 
     - name: Activate Emscripten
