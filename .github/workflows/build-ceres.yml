@@ -14,19 +14,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-#    - name: Checkout
-#      uses: actions/checkout@v4
-    
+
     - name: Setup Environment & Folders
       shell: bash
       run: | 
         echo "cwd=$(pwd)" >> $GITHUB_ENV
         echo "bdir=$(pwd)/build" >> $GITHUB_ENV
-        mkdir $bdir/packages
-        mkdir $bdir/buildpkg
-        mkdir $bdir/installpkg
-        mkdir $bdir/buildpkg/eigen
-        mkdir $bdir/buildpkg/ceres-solver
+        sudo mkdir $bdir/packages
+        sudo mkdir $bdir/buildpkg
+        sudo mkdir $bdir/installpkg
+        sudo mkdir $bdir/buildpkg/eigen
+        sudo mkdir $bdir/buildpkg/ceres-solver
 
     - name: Clone Emscripten
       shell: bash
