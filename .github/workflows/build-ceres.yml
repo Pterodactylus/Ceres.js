@@ -21,7 +21,7 @@ jobs:
       shell: bash
       run: | 
         echo "cwd=$(pwd)" >> $GITHUB_ENV
-        echo "bdir=$(pwd)/build >> $GITHUB_ENV
+        echo "bdir=$(pwd)/build" >> $GITHUB_ENV
 
 
     - name: Clone Emscripten
