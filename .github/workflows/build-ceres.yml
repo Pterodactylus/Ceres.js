@@ -17,16 +17,28 @@ jobs:
 #    - name: Checkout
 #      uses: actions/checkout@v4
     
-    - name: Setup Environment
+    - name: Setup Environment & Folders
       shell: bash
       run: | 
         echo "cwd=$(pwd)" >> $GITHUB_ENV
         echo "bdir=$(pwd)/build" >> $GITHUB_ENV
-
+        mkdir $bdir/packages
+        mkdir $bdir/buildpkg
+        mkdir $bdir/installpkg
+        mkdir $bdir/buildpkg/eigen
+        mkdir $bdir/buildpkg/ceres-solver
 
     - name: Clone Emscripten
-      shell: bash  
+      shell: bash
       run: git clone -b "3.1.51" https://github.com/emscripten-core/emsdk.git $bdir/emsdk
+
+    - name: Clone Ceres
+      shell: bash
+      run: git clone -b "2.2.0" https://ceres-solver.googlesource.com/ceres-solver $bdir/packages/ceres-solver
+      
+    - name: Clone Eigen
+      shell: bash
+      run: git clone -b "3.4.0" https://gitlab.com/libeigen/eigen.git $bdir/packages/eigen
 
     - name: Activate Emscripten
       shell: bash
@@ -42,10 +54,17 @@ jobs:
         
         # Activate PATH and other environment variables in the current terminal
         source ./emsdk_env.sh
+            
+    - name: Make & Install Eigen
+      run: |
+        cd $bdir/buildpkg/eigen
+        $bdir/emsdk/upstream/emscripten/emcmake cmake $bdir/packages/eigen -DCMAKE_INSTALL_PREFIX=$bdir/installpkg
+        $bdir/emsdk/upstream/emscripten/emmake make
+        make -j4 install
 
-#    - name: make
-#      run: make
-#    - name: make check
-#      run: make check
-#    - name: make distcheck
-#      run: make distcheck
+    - name: Make & Install Ceres Solver
+      run: |
+        cd $bdir/buildpkg/ceres-solver
+        cp --verbose $cwd/CMakeListsCeres.txt $bdir/packages/ceres-solver/CMakeLists.txt
+        $bdir/emsdk/upstream/emscripten/emcmake cmake $bdir/packages/ceres-solver -DCMAKE_INSTALL_PREFIX=$bdir/installpkg -DEigen3_DIR=$bdir/installpkg/share/eigen3/cmake
+        make -j4 install
