@@ -20,7 +20,7 @@ You can install Ceres.js by including the Ceres.js file in your HTML or js code.
 ```
 
 ## Basic Example (New Syntax)
-Recently in 2024 we have introduced a new syntax for the Ceres js engine.
+Recently in 2024 we have introduced a new syntax for the Ceres js engine. The equations defined must all equal zero when the problem is solved.
 
 ```html
 <script>
@@ -56,7 +56,7 @@ Recently in 2024 we have introduced a new syntax for the Ceres js engine.
 
 
 ## Basic Example (Old Syntax)
-Ceres.js takes a vector of residual equations that are all equal to zero when the problem is solved. The equations can be non-linear. Here is a basic example.
+The old syntax is still supported for Ceres. Ceres.js takes a vector of residual equations that are all equal to zero when the problem is solved. The equations can be non-linear. Here is a basic example.
 
 ```html
 <script>
