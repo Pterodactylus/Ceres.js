@@ -1,23 +1,292 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Ceres.js</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif; color: #333; margin: 0; padding: 0;}
+        .container {
+            max-width: 800px; margin: auto; padding: 20px; }
+        h1, h2 {
+            color: #343a40;}
+        img {
+            height: 80px;}
+        code {
+            font-family: Courier New; background-color: #f8f9fa; padding: 2px 4px; border-radius: 4px;}
+        header, footer {
+            background-color: #e0f7fa; color: #333; padding: 20px;  text-align: center;}
+        section { 
+            padding: 20px 0; }
+        nav {
+            background-color: #e0ffff; padding: 15px; text-align: center;}
+        a { 
+            color: #333; text-decoration: none; margin: 0 15px;}
+    </style>
+    <script src="https://www.desmos.com/api/v1.4/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
+    <link href="themes/prism.css" rel="stylesheet" />
+    
 </head>
 <body>
+    <header>
+        <img src="images/logo.png" alt="Ceres.js Logo"> <!--Link to your logo--> 
+        <h1>Ceres.js</h1>
+        <h2>Numerical Optimization Library in JavaScript</h2>
+    </header>
+    <nav>
+        <a href="#intro">Intro</a> | 
+        <a href="#about">About</a> | 
+        <a href="#examples">Examples</a> | 
+        <a href="#docs">Documentation</a> | 
+        <a href="#contact">Contact</a>
+    </nav>
 
-<h1>Examples</h1>
-<p>Ceres.js is a versatile optimization library that can handle a wide range of problems and is well-suited for solving large and complicated optimization problems. The fact that it is a mature and performant library, with a wealth of features, makes it an attractive option for developers looking to solve optimization problems in JavaScript. Additionally, the fact that it is an open-source library that is based on the popular Ceres Solver library means that it has a strong community of users and contributors who can offer support and contribute to its development.</p>
-<h2>New JSON Syntax</h2>
-<p>Using the <a href="./json_syntax.html">JSON syntax</a> with Ceres.js</p>
-<h2>Basic Function</h2>
-<p>Solving a <a href="./quadratic.html">Quadratic System</a> using Ceres.js</p>
-<h2>Arrow Function</h2>
-<p>Solving the <a href="./arrow_functions.html">Arrow Function</a> using Ceres.js</p>
-<h2>Powell Function</h2>
-<p>Solving the <a href="./powell.html">Powell Function</a> using Ceres.js</p>
-<h2>Rosenbrock Function</h2>
-<p>Solving the <a href="./rosenbrock.html">Rosenbrock Function</a> using Ceres.js</p>
+    <section id="intro" class="container">
+        <h2>Introduction</h2>
+        <p>Ceres.js is a javascript port of the Ceres solver. Ceres Solver is an open source C++ library for modeling and solving large, complicated optimization problems. It can be used to solve Non-linear Least Squares problems with bounds constraints and general unconstrained optimization problems. It is a mature, feature rich, and performant library.</p>
+        <!-- Introduction Content here -->
+    </section>
 
+    <section id="about" class="container">
+        <h2>About</h2>
+        <!-- About Content Here -->
+    </section>
 
+    <section id="examples" class="container">
+        <h2>Examples</h2>
+        <h3>User Defined Function</h3>
+        <p>This is an example of the solution of the user defined function using Ceres.js</p>
+        <pre><code class="language-js">
+async function ceresSolveArrowFunction() {
+    const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.min.js');
+
+    let f = function (x, a, b, c){
+        return a*x[0]*x[0] + b*x[0] + c
+    }
+
+    let solver = new Ceres()
+
+    let a = -1
+    let b = 0
+    let c = 9
+    solver.addFunction((x) => f(x, a, b, c)) //Add the first equation to the solver.
+    var x_guess = [1] //Guess the initial values of the solution.
+    let s = await solver.solve(x_guess) //Solve the equation
+    var x = s.x //assign the calculated solution array to the variable x
+    document.getElementById("arrow_demo").value = s.report + "\n\n" //Print solver report
+    solver.reset() // erases the loaded functions and resets the solver.
+
+    a = -2
+    b = 1
+    c = 9
+    solver.addFunction((x) => f(x, a, b, c)) //Add the first equation to the solver.
+    x_guess = [1] //Guess the initial values of the solution.
+    s = await solver.solve(x_guess) //Solve the equation
+    x = s.x //assign the calculated solution array to the variable x
+    document.getElementById("arrow_demo").value += s.report //Print solver report
+
+    solver.remove() //required to free the memory in C++
+}
+ceresSolveArrowFunction()
+        </code></pre>
+        <textarea id="arrow_demo" rows="40" cols="110"></textarea>
+        <script>
+            async function ceresSolveArrowFunction() {
+                const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.min.js');
+        
+                let f = function (x, a, b, c){
+                    return a*x[0]*x[0] + b*x[0] + c
+                }
+        
+                let solver = new Ceres()
+        
+                let a = -1
+                let b = 0
+                let c = 9
+                solver.addFunction((x) => f(x, a, b, c)) //Add the first equation to the solver.
+                var x_guess = [1] //Guess the initial values of the solution.
+                let s = await solver.solve(x_guess) //Solve the equation
+                var x = s.x //assign the calculated solution array to the variable x
+                document.getElementById("arrow_demo").value = s.report + "\n\n" //Print solver report
+                solver.reset() // erases the loaded functions and resets the solver.
+        
+                a = -2
+                b = 1
+                c = 9
+                solver.addFunction((x) => f(x, a, b, c)) //Add the first equation to the solver.
+                x_guess = [1] //Guess the initial values of the solution.
+                s = await solver.solve(x_guess) //Solve the equation
+                x = s.x //assign the calculated solution array to the variable x
+                document.getElementById("arrow_demo").value += s.report //Print solver report
+        
+                solver.remove() //required to free the memory in C++
+            }
+            ceresSolveArrowFunction()
+        </script>
+
+        <h3>JSON Syntax Demo Function</h3>
+        <p>This is an example using the JSON syntax with Ceres.js</p>
+        <div><button type="button" onclick="ceresSolveJSON()">Solve</button> </div>
+        <textarea id="json_demo" rows="40" cols="110"></textarea>
+        <script>
+
+            let jsonSystem = {
+                "variables": {
+                    "a": {
+                        "lowerbound": -2,
+                        "guess": 1,
+                    }, 
+                    "b": {
+                        "upperbound": 5,
+                        "guess": 2,
+                    },
+                },
+                "functions": [
+                    "a + 10 * b - 20",
+                    "sqrt(5) * a - b^2 + 4"
+                ]
+            };
+        
+            async function ceresSolveJSON() {
+                const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.min.js');
+                let solver = new Ceres();
+                let results = await solver.run(jsonSystem);
+                document.getElementById("json_demo").value = results.report //Print solver report
+            }
+        
+        </script>
+
+        <h3>Powell Function</h3>
+        <p>This is an example of the solution of the powell function using Ceres.js</p>
+        <textarea id="powell_demo" rows="40" cols="110"></textarea>
+        <script>
+            async function ceresSolvePowell() {
+                const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.min.js');
+        
+                var fn1 = function f1(x){
+                    return (x[0]+10*x[1]);
+                }
+        
+                var fn2 = function f2(x){
+                    return (Math.sqrt(5)*(x[2]-x[3]));
+                }
+                
+                var fn3 = function f3(x){
+                    return Math.pow(x[1]-2*x[2],2);
+                }
+                
+                var fn4 = function f4(x){
+                    return Math.sqrt(10)*Math.pow(x[0]-x[3],2);
+                }
+                
+                let solver = new Ceres()
+                solver.addFunction(fn1) //Add the first equation to the solver.
+                solver.addFunction(fn2) //Add the second equation to the solver.
+                solver.addFunction(fn3) //Add the third equation to the solver.
+                solver.addFunction(fn4) //Add the forth equation to the solver.
+                //solver.addCallback(c1) //Add the callback to the solver.
+                //solver.addLowerbound(0,1.6) //Add a lower bound to the x[0] variable
+                //solver.addUpperbound(1,1.7) //Add a upper bound to the x[1] variable
+                
+                var x_guess = [1,2,3,4] //Guess the initial values of the solution.
+                let s = await solver.solve(x_guess) //Solve the equation
+                var x = s.x //assign the calculated solution array to the variable x
+                document.getElementById("powell_demo").value = s.report //Print solver report
+                solver.remove() //required to free the memory in C++
+                
+            }
+            ceresSolvePowell();
+        </script>
+
+        <h3>Quadratic Function</h3>
+        <p>This is an example of the solution of the quadratic function using <a href="https://github.com/Pterodactylus/ceres.js">Ceres.js</a></p>
+
+        <div id="calculator" style="width: 600px; height: 400px;"></div>
+        <script>
+        var elt = document.getElementById('calculator');
+        var calculator = Desmos.GraphingCalculator(elt);
+        calculator.setExpression({ id: 'exp1', latex: 'x+10*y-20 = 0' });
+        calculator.setExpression({ id: 'exp2', latex: "\\sqrt{5}*x-y^2 = 0" });
+        </script>
+        <p><textarea id="quadratic_demo" rows="40" cols="110"></textarea></p>
+        <script>
+            async function ceresSolveQuadratic() {
+                const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.min.js');
+        
+                var fn1 = function f1(x){
+                    return (x[0]+10*x[1]-20); //this equation is of the for f1(x) = 0 
+                }
+        
+                var fn2 = function f2(x){
+                    return (Math.sqrt(5)*x[0]-Math.pow(x[1], 2)); //this equation is of the for f2(x) = 0 
+                }
+                
+                let solver = new Ceres()
+                solver.addFunction(fn1) //Add the first equation to the solver.
+                solver.addFunction(fn2) //Add the second equation to the solver.
+                //solver.addCallback(c1) //Add the callback to the solver.
+                //solver.addLowerbound(0,1.6) //Add a lower bound to the x[0] variable
+                //solver.addUpperbound(1,1.7) //Add a upper bound to the x[1] variable
+                
+                
+                var x_guess = [1,2] //Guess the initial values of the solution.
+                let s = await solver.solve(x_guess) //Solve the equation
+                var x = s.x //assign the calculated solution array to the variable x
+                document.getElementById("quadratic_demo").value = s.report //Print solver report
+                solver.remove() //required to free the memory in C++
+                
+            }
+            ceresSolveQuadratic()
+        </script>
+
+        <h3>Rosebrock Function</h3>
+        <p>This is an example of the solution of the Rosenbrock function using Ceres.js</p>
+        <textarea id="rosebrock_demo" rows="40" cols="110"></textarea>
+        <script>
+            async function ceresSolveRosebrock() {
+                const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.min.js');
+            
+                var fn1 = function (x){
+                    return (1.0 - x[0]) * (1.0 - x[0]) + 100.0 * (x[1] - x[0] * x[0]) * (x[1] - x[0] * x[0]);
+                }
+                
+                var c1 = function(x){
+                    //console.log("Min Loop xxx")
+                    //console.log(x+" ")
+                    return null
+                }
+                
+                let solver = new Ceres()
+                solver.addFunction(fn1) //Add the first equation to the solver.
+                /solver.addCallback(c1) //Add the callback to the solver.
+                //solver.addLowerbound(0,1.6) //Add a lower bound to the x[0] variable
+                //solver.addUpperbound(1,1.7) //Add a upper bound to the x[1] variable
+                
+                
+                var x_guess = [-2, 1.0] //Guess the initial values of the solution.
+                let s = await solver.solve(x_guess) //Solve the equation
+                console.log(s)
+                //var x = s.x //assign the calculated solution array to the variable x
+                document.getElementById("rosebrock_demo").value = s.report //Print solver report
+                solver.remove() //required to free the memory in C++
+                
+            }
+            ceresSolveRosebrock()
+        </script>
+    </section>
+
+    <section id="docs" class="container">
+        <h2>Documentation</h2>
+        <!-- Documentation Content Here -->
+    </section>
+
+    <section id="contact" class="container">
+        <h2>Contact</h2>
+        <!-- Contact Information / Form Here -->
+    </section>
+
+    <footer>
+        Ceres.js © 2024
+    </footer>
+    <script src="./js/prism.js"></script>
 </body>
 </html>
