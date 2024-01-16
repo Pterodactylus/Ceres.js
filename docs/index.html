@@ -20,7 +20,7 @@
             padding: 20px 0; }
         nav {
             background-color: #e0ffff; padding: 15px; text-align: center;}
-        a { 
+        nav > a { 
             color: #333; text-decoration: none; margin: 0 15px;}
     </style>
     <script src="https://www.desmos.com/api/v1.4/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
@@ -49,7 +49,11 @@
 
     <section id="about" class="container">
         <h2>About</h2>
-        <!-- About Content Here -->
+        <p><a href="https://github.com/Pterodactylus/Ceres.js">Ceres.js</a> is a port of the Ceres solver. There are js libraries such as <a href="https://mathjs.org/">math.js</a> and <a href="http://algebrite.org/">algebrite.js</a> that do have some capabilities to solve LINEAR systems of equations. The purpose of <a href="https://github.com/Pterodactylus/Ceres.js">Ceres.js</a> is to have a robust solver for the non-linear equations. The authors are not aware of another js library that solves systems of non-linear equations numerically. Ceres js works best when you give it a set of equations F(x)=0 with an zero solution. If you need to do constrained maximization or minimization there is another library <a href="https://github.com/Pterodactylus/Alglib.js">Alglib.js</a> that can do that.</p>
+        <h3>Key Questions:</h3>
+        <p>Do you have a single equation or a system of multiple equations? Ceres.js will work with both but may be overkill for the single equation.</p>
+        <p>Are you trying to find the zeros of that system, F(x)=0, or seeing to minimize a cost function? Ceres.js finds the zeros of a system.</p>
+        <p>Are your equations linear or non-linear? Ceres.js will solve both linear and non-linear. If you only have linear equations there are likely more optimized solvers to do that job.</p>
     </section>
 
     <section id="examples" class="container">
@@ -248,7 +252,23 @@
 
     <section id="docs" class="container">
         <h2>Documentation</h2>
-        <!-- Documentation Content Here -->
+        <p>The <strong>Ceres</strong> class starts an instance of the Ceres solver. It has several methods for configuration, interaction, and operation as detailed below.</p>
+
+        <h3>Exported Modules:</h3>
+
+        <h4>Class: Ceres</h4>
+
+        <ul>
+            <li> <b>Ceres()</b>: The constructor method takes no inputs and creates a new Solver instance.</li>
+            <li> <b>addFunction(fn)</b>: Method takes a function that should return a residual. These functions (residuals) should equal zero at the solution point i.e. F(x) = 0.</li>
+            <li> <b>addLowerbound(xNumber, lowerBound)</b>: Method to set a lower bound to a variable utilized in the solver.</li>
+            <li> <b>addUpperbound(xNumber, upperBound)</b>: Method to set an upper bound to a variable within the solver.</li>
+            <li> <b>addCallback(callback_handle)</b>: Method takes a callback function to run every time before a function evaluation. It can be used to print intermediate results.</li>
+            <li> <b>reset()</b>: Method removes the loaded functions and allows new functions to be assigned to the same object.</li>
+            <li> <b>solve(initial_guesses, max_num_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16, max_solver_time_in_seconds = 100, initial_trust_region_radius = 1e4, max_trust_region_radius = 1e16, max_num_consecutive_invalid_steps = 5)</b>: Method requires an array that defines the solver starting point and returns an `x` solution array and a `report` variable with a full report of the solver output.</li>
+            <li> <b>remove()</b>: Method to delete the current solver instance.</li>
+            <li> <b>run(jsonSystem)</b>: Asynchronous method to run the solver using configuration and equations specified in JSON format.</li>
+        </ul>
     </section>
 
     <section id="contact" class="container">

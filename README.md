@@ -26,7 +26,7 @@ Recently in 2024 we have introduced a new syntax for the Ceres js engine. The eq
 <script>
 
 	async function ceresLoading() {
-		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.min.js');
+		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@latest/dist/ceres.min.js');
 		var solver = new Ceres();
 
 		let jsonSystem = {
@@ -61,7 +61,7 @@ The old syntax is still supported for Ceres. Ceres.js takes a vector of residual
 ```html
 <script>
 	async function ceresLoading() {
-		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.min.js'); //Always imported via ES6 import
+		const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@latest/dist/ceres.min.js'); //Always imported via ES6 import
 
 		var fn1 = function f1(x){
 			return (x[0]+10*x[1]-20); //this equation is of the form f1(x) = 0 
