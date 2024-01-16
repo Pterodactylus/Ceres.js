@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Ceres.js</title>
+    <link rel="icon" type="image/x-icon" href="./images/logo.jpeg">
     <style>
         body {
             font-family: Arial, sans-serif; color: #333; margin: 0; padding: 0;}
@@ -28,7 +29,7 @@
 </head>
 <body>
     <header>
-        <img src="images/logo.png" alt="Ceres.js Logo"> <!--Link to your logo--> 
+        <img src="images/logo.jpeg" alt="Ceres.js Logo"> <!--Link to your logo--> 
         <h1>Ceres.js</h1>
         <h2>Numerical Optimization Library in JavaScript</h2>
     </header>
@@ -55,41 +56,9 @@
         <h2>Examples</h2>
         <h3>User Defined Function</h3>
         <p>This is an example of the solution of the user defined function using Ceres.js</p>
-        <pre><code class="language-js">
-async function ceresSolveArrowFunction() {
-    const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.min.js');
-
-    let f = function (x, a, b, c){
-        return a*x[0]*x[0] + b*x[0] + c
-    }
-
-    let solver = new Ceres()
-
-    let a = -1
-    let b = 0
-    let c = 9
-    solver.addFunction((x) => f(x, a, b, c)) //Add the first equation to the solver.
-    var x_guess = [1] //Guess the initial values of the solution.
-    let s = await solver.solve(x_guess) //Solve the equation
-    var x = s.x //assign the calculated solution array to the variable x
-    document.getElementById("arrow_demo").value = s.report + "\n\n" //Print solver report
-    solver.reset() // erases the loaded functions and resets the solver.
-
-    a = -2
-    b = 1
-    c = 9
-    solver.addFunction((x) => f(x, a, b, c)) //Add the first equation to the solver.
-    x_guess = [1] //Guess the initial values of the solution.
-    s = await solver.solve(x_guess) //Solve the equation
-    x = s.x //assign the calculated solution array to the variable x
-    document.getElementById("arrow_demo").value += s.report //Print solver report
-
-    solver.remove() //required to free the memory in C++
-}
-ceresSolveArrowFunction()
-        </code></pre>
+        <pre><code id="arrow_demo_code" class="language-js"></code></pre>
         <textarea id="arrow_demo" rows="40" cols="110"></textarea>
-        <script>
+        <script id="arrow_demo_code_source">
             async function ceresSolveArrowFunction() {
                 const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.min.js');
         
@@ -122,12 +91,14 @@ ceresSolveArrowFunction()
             }
             ceresSolveArrowFunction()
         </script>
+        <script>document.getElementById("arrow_demo_code").innerHTML = document.getElementById("arrow_demo_code_source").innerHTML</script>
 
         <h3>JSON Syntax Demo Function</h3>
         <p>This is an example using the JSON syntax with Ceres.js</p>
+        <pre><code id="json_demo_code" class="language-js"></code></pre>
         <div><button type="button" onclick="ceresSolveJSON()">Solve</button> </div>
         <textarea id="json_demo" rows="40" cols="110"></textarea>
-        <script>
+        <script id="json_demo_code_source">
 
             let jsonSystem = {
                 "variables": {
@@ -154,11 +125,13 @@ ceresSolveArrowFunction()
             }
         
         </script>
+        <script>document.getElementById("json_demo_code").innerHTML = document.getElementById("json_demo_code_source").innerHTML</script>
 
         <h3>Powell Function</h3>
         <p>This is an example of the solution of the powell function using Ceres.js</p>
+        <pre><code id="powell_demo_code" class="language-js"></code></pre>
         <textarea id="powell_demo" rows="40" cols="110"></textarea>
-        <script>
+        <script id="powell_demo_code_source">
             async function ceresSolvePowell() {
                 const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.min.js');
         
@@ -196,10 +169,11 @@ ceresSolveArrowFunction()
             }
             ceresSolvePowell();
         </script>
+        <script>document.getElementById("powell_demo_code").innerHTML = document.getElementById("powell_demo_code_source").innerHTML</script>
 
         <h3>Quadratic Function</h3>
         <p>This is an example of the solution of the quadratic function using <a href="https://github.com/Pterodactylus/ceres.js">Ceres.js</a></p>
-
+        <pre><code id="quadratic_demo_code" class="language-js"></code></pre>
         <div id="calculator" style="width: 600px; height: 400px;"></div>
         <script>
         var elt = document.getElementById('calculator');
@@ -208,7 +182,7 @@ ceresSolveArrowFunction()
         calculator.setExpression({ id: 'exp2', latex: "\\sqrt{5}*x-y^2 = 0" });
         </script>
         <p><textarea id="quadratic_demo" rows="40" cols="110"></textarea></p>
-        <script>
+        <script id="quadratic_demo_code_source">
             async function ceresSolveQuadratic() {
                 const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.min.js');
         
@@ -237,41 +211,39 @@ ceresSolveArrowFunction()
             }
             ceresSolveQuadratic()
         </script>
+        <script>document.getElementById("quadratic_demo_code").innerHTML = document.getElementById("quadratic_demo_code_source").innerHTML</script>
 
         <h3>Rosebrock Function</h3>
         <p>This is an example of the solution of the Rosenbrock function using Ceres.js</p>
+        <pre><code id="rosebrock_demo_code" class="language-js"></code></pre>
         <textarea id="rosebrock_demo" rows="40" cols="110"></textarea>
-        <script>
+        <script id="rosebrock_demo_code_source">
             async function ceresSolveRosebrock() {
-                const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.min.js');
-            
-                var fn1 = function (x){
-                    return (1.0 - x[0]) * (1.0 - x[0]) + 100.0 * (x[1] - x[0] * x[0]) * (x[1] - x[0] * x[0]);
-                }
+                const {Ceres} = await import('../dist/ceres.js');
                 
-                var c1 = function(x){
-                    //console.log("Min Loop xxx")
-                    //console.log(x+" ")
-                    return null
+                let rosebrockSystem = {
+                    "variables": {
+                        "x": {
+                            "guess": -2,
+                        }, 
+                        "y": {
+                            "guess": 1.0,
+                        },
+                    },
+                    "functions": [
+                        "(1-x)^2 + 100*(y-x^2)^2", //The solution is x=1, y=1
+                    ],
+                    "max_numb_iterations": 10000, //Increase the default number of iterations
+                    "parameter_tolerance": 0.0000001, //In this case we want Ceres to act as a function minimizer.
                 }
-                
+
                 let solver = new Ceres()
-                solver.addFunction(fn1) //Add the first equation to the solver.
-                /solver.addCallback(c1) //Add the callback to the solver.
-                //solver.addLowerbound(0,1.6) //Add a lower bound to the x[0] variable
-                //solver.addUpperbound(1,1.7) //Add a upper bound to the x[1] variable
-                
-                
-                var x_guess = [-2, 1.0] //Guess the initial values of the solution.
-                let s = await solver.solve(x_guess) //Solve the equation
-                console.log(s)
-                //var x = s.x //assign the calculated solution array to the variable x
-                document.getElementById("rosebrock_demo").value = s.report //Print solver report
-                solver.remove() //required to free the memory in C++
-                
+                let results = await solver.run(rosebrockSystem);
+                document.getElementById("rosebrock_demo").value = results.report //Print solver report 
             }
             ceresSolveRosebrock()
         </script>
+        <script>document.getElementById("rosebrock_demo_code").innerHTML = document.getElementById("rosebrock_demo_code_source").innerHTML</script>
     </section>
 
     <section id="docs" class="container">

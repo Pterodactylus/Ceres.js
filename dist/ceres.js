@@ -3719,23 +3719,23 @@ export class Ceres {
 			throw new Error(`Invalid mathematical expression: ${mathExpression}`);
 		}
 		
-		mathExpression = mathExpression.replace('^', '**');
+		mathExpression = mathExpression.replaceAll('^', '**');
 
 		// Translation to Javascript functions
 		mathExpression = mathExpression
-		.replace(/sin/g, 'Math.sin')
-		.replace(/cos/g, 'Math.cos')
-		.replace(/tan/g, 'Math.tan')
-		.replace(/cot/g, 'Math.cot')
-		.replace(/sec/g, 'Math.sec')
-		.replace(/csc/g, 'Math.csc')
-		.replace(/log/g, 'Math.log10')
-		.replace(/ln/g, 'Math.log')
-		.replace(/sqrt/g, 'Math.sqrt')
-		.replace(/exp/g, 'Math.exp')
-		.replace(/abs/g, 'Math.abs')
-		.replace(/Pi/g, 'Math.PI')
-		.replace(/E/g, 'Math.E');
+		.replaceAll(/sin/g, 'Math.sin')
+		.replaceAll(/cos/g, 'Math.cos')
+		.replaceAll(/tan/g, 'Math.tan')
+		.replaceAll(/cot/g, 'Math.cot')
+		.replaceAll(/sec/g, 'Math.sec')
+		.replaceAll(/csc/g, 'Math.csc')
+		.replaceAll(/log/g, 'Math.log10')
+		.replaceAll(/ln/g, 'Math.log')
+		.replaceAll(/sqrt/g, 'Math.sqrt')
+		.replaceAll(/exp/g, 'Math.exp')
+		.replaceAll(/abs/g, 'Math.abs')
+		.replaceAll(/Pi/g, 'Math.PI')
+		.replaceAll(/E/g, 'Math.E');
 		
     	return mathExpression;
 	}
@@ -3748,7 +3748,7 @@ export class Ceres {
         
         // sanitize the input to prevent injection attacks
         jsonFunctions = jsonFunctions.map(Ceres.sanitizeInput);
-        //console.log(jsonSystem.functions)
+        //console.log(jsonFunctions)
     
         jsonFunctions.forEach(jsonFunction => this.addFunction(new Function('x', `return ${jsonFunction}`)));
 
@@ -3761,16 +3761,28 @@ export class Ceres {
                 this.addUpperbound(index, variable.upperbound);
             }
         });
+
+		return jsonFunctions
     }
 
 	generateInitialGuess(variablesMapping) {
         return Object.keys(variablesMapping).map(varName => variablesMapping[varName].guess);
     }
 
-	async run(jsonSystem, max_numb_iterations = 2000, parameter_tolerance = 1e-10, function_tolerance = 1e-16, gradient_tolerance = 1e-16, max_solver_time_in_seconds = 100, initial_trust_region_radius = 1e4, max_trust_region_radius = 1e16, max_num_consecutive_invalid_steps = 5) {
-		this.setSystemFromJson(jsonSystem);
+	async run(jsonSystem) {
+		function isNumber(n) { return !isNaN(parseFloat(n)) && !isNaN(n - 0) }
+		let jsonFunctions = this.setSystemFromJson(jsonSystem);
 		let initial_guess = this.generateInitialGuess(jsonSystem.variables);
+		let max_numb_iterations = (isNumber(jsonSystem.max_numb_iterations)) ? jsonSystem.max_numb_iterations : 2000;
+		let parameter_tolerance = (isNumber(jsonSystem.parameter_tolerance)) ? jsonSystem.parameter_tolerance : 1e-10;
+		let function_tolerance = (isNumber(jsonSystem.function_tolerance)) ? jsonSystem.function_tolerance : 1e-16;
+		let gradient_tolerance = (isNumber(jsonSystem.gradient_tolerance)) ? jsonSystem.gradient_tolerance : 1e-16;
+		let max_solver_time_in_seconds = (isNumber(jsonSystem.max_solver_time_in_seconds)) ? jsonSystem.max_solver_time_in_seconds : 100;
+		let initial_trust_region_radius = (isNumber(jsonSystem.initial_trust_region_radius)) ? jsonSystem.initial_trust_region_radius : 1e4;
+		let max_trust_region_radius = (isNumber(jsonSystem.max_trust_region_radius)) ? jsonSystem.max_trust_region_radius : 1e16;
+		let max_num_consecutive_invalid_steps = (isNumber(jsonSystem.max_num_consecutive_invalid_steps)) ? jsonSystem.max_num_consecutive_invalid_steps : 5;
 		const results = await this.solve(initial_guess, max_numb_iterations, parameter_tolerance, function_tolerance, gradient_tolerance, max_solver_time_in_seconds, initial_trust_region_radius, max_trust_region_radius, max_num_consecutive_invalid_steps);
+		results.report = jsonFunctions.map(i => 'Function: ' + i + ' = 0\n')+"\n\n"+results.report
 		return results;
 	}
 }
