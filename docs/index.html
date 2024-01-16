@@ -60,7 +60,7 @@
         <textarea id="arrow_demo" rows="40" cols="110"></textarea>
         <script id="arrow_demo_code_source">
             async function ceresSolveArrowFunction() {
-                const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.min.js');
+                const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@latest/dist/ceres.min.js');
         
                 let f = function (x, a, b, c){
                     return a*x[0]*x[0] + b*x[0] + c
@@ -118,7 +118,7 @@
             };
         
             async function ceresSolveJSON() {
-                const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.min.js');
+                const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@latest/dist/ceres.min.js');
                 let solver = new Ceres();
                 let results = await solver.run(jsonSystem);
                 document.getElementById("json_demo").value = results.report //Print solver report
@@ -133,7 +133,7 @@
         <textarea id="powell_demo" rows="40" cols="110"></textarea>
         <script id="powell_demo_code_source">
             async function ceresSolvePowell() {
-                const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.min.js');
+                const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@latest/dist/ceres.min.js');
         
                 var fn1 = function f1(x){
                     return (x[0]+10*x[1]);
@@ -184,7 +184,7 @@
         <p><textarea id="quadratic_demo" rows="40" cols="110"></textarea></p>
         <script id="quadratic_demo_code_source">
             async function ceresSolveQuadratic() {
-                const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.min.js');
+                const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@latest/dist/ceres.min.js');
         
                 var fn1 = function f1(x){
                     return (x[0]+10*x[1]-20); //this equation is of the for f1(x) = 0 
@@ -219,7 +219,7 @@
         <textarea id="rosebrock_demo" rows="40" cols="110"></textarea>
         <script id="rosebrock_demo_code_source">
             async function ceresSolveRosebrock() {
-                const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@master/dist/ceres.min.js');
+                const {Ceres} = await import('https://cdn.jsdelivr.net/gh/Pterodactylus/Ceres.js@latest/dist/ceres.min.js');
                 
                 let rosebrockSystem = {
                     "variables": {
