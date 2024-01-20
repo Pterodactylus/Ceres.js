@@ -1,5 +1,4 @@
 
-
 //Ceres Helper JS
 
 export class Ceres {
@@ -118,64 +117,25 @@ export class Ceres {
 		this.instance.delete();
 	}
 
-	static parseFunctionFromJson(jsonFunction, variablesMapping) {
-        let parsedFunction = jsonFunction;
-
-        // Replace variables with their corresponding indexed representations
-        Object.keys(variablesMapping).forEach((varName, index) => {
-            let regex = new RegExp('\\b' + varName + '\\b', 'g');
-            parsedFunction = parsedFunction.replace(regex, `x[${index}]`);
-        });
-
-        return parsedFunction;
-    }
-
-  	static sanitizeInput(mathExpression) {
-		if (mathExpression.indexOf('=') > -1)
-		{
-			let m_split = mathExpression.split("=")
-			mathExpression = m_split[0]+"-("+m_split[1]+")"
-		}
-
-		const validExpression = /^[0-9\s+\-/*()\[\]^sincoxetalaqrtPi.E]*$/;
-		const validStructure = /^[\d\s+\-/*()\[\]^]*$/;
-
-		if (!validExpression.test(mathExpression) || !validStructure.test(mathExpression.replace(/sin|cos|tan|cot|sec|csc|log|ln|sqrt|exp|abs|x|E|Pi/g,''))){
-			throw new Error(`Invalid mathematical expression: ${mathExpression}`);
-		}
-		
-		mathExpression = mathExpression.replaceAll('^', '**');
-
-		// Translation to Javascript functions
-		mathExpression = mathExpression
-		.replaceAll(/sin/g, 'Math.sin')
-		.replaceAll(/cos/g, 'Math.cos')
-		.replaceAll(/tan/g, 'Math.tan')
-		.replaceAll(/cot/g, 'Math.cot')
-		.replaceAll(/sec/g, 'Math.sec')
-		.replaceAll(/csc/g, 'Math.csc')
-		.replaceAll(/log/g, 'Math.log10')
-		.replaceAll(/ln/g, 'Math.log')
-		.replaceAll(/sqrt/g, 'Math.sqrt')
-		.replaceAll(/exp/g, 'Math.exp')
-		.replaceAll(/abs/g, 'Math.abs')
-		.replaceAll(/Pi/g, 'Math.PI')
-		.replaceAll(/E/g, 'Math.E');
-		
-    	return mathExpression;
+	static create_evalutex_fn(fn_string, variables){
+		let fn = evaluatex(fn_string);
+		let fn1 = function(variables, fn, x){	
+			let v = Object.keys(variables);
+			const obj = {}
+			for( var key in v ) {
+				Object.assign(obj, {[v[key]]: x[key]});
+			}
+			return fn(obj);
+		}.bind(null, variables, fn)
+		return fn1
 	}
 
     setSystemFromJson(jsonSystem) {
-        
         //console.log(jsonSystem.functions)
         let variables = jsonSystem.variables
-        let jsonFunctions = jsonSystem.functions.map(function(x) { return Ceres.parseFunctionFromJson(x, variables); });
-        
-        // sanitize the input to prevent injection attacks
-        jsonFunctions = jsonFunctions.map(Ceres.sanitizeInput);
-        //console.log(jsonFunctions)
-    
-        jsonFunctions.forEach(jsonFunction => this.addFunction(new Function('x', `return ${jsonFunction}`)));
+
+		let jsonFunctions = jsonSystem.functions.map(function(fn_string) { return Ceres.create_evalutex_fn(fn_string, variables); });
+		jsonFunctions.forEach(jsonFunction => this.addFunction(jsonFunction));
 
         Object.keys(jsonSystem.variables).forEach((varName, index) => {
             let variable = jsonSystem.variables[varName];
@@ -207,7 +167,7 @@ export class Ceres {
 		let max_trust_region_radius = (isNumber(jsonSystem.max_trust_region_radius)) ? jsonSystem.max_trust_region_radius : 1e16;
 		let max_num_consecutive_invalid_steps = (isNumber(jsonSystem.max_num_consecutive_invalid_steps)) ? jsonSystem.max_num_consecutive_invalid_steps : 5;
 		const results = await this.solve(initial_guess, max_numb_iterations, parameter_tolerance, function_tolerance, gradient_tolerance, max_solver_time_in_seconds, initial_trust_region_radius, max_trust_region_radius, max_num_consecutive_invalid_steps);
-		results.report = jsonFunctions.map(i => 'Function: ' + i + ' = 0\n').join("\r\n")+"\n\n"+results.report
+		results.report = jsonSystem.functions.map(i => 'Function: ' + i + ' = 0\n').join("\r\n")+"\n\n"+results.report
 		return results;
 	}
 }
