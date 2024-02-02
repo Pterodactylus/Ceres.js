@@ -118,6 +118,13 @@ export class Ceres {
 	}
 
 	static create_evalutex_fn(fn_string, variables){
+
+		let count = (fn_string.match(/=/g) || []).length;
+		if (count == 1){
+			let fn_array = fn_string.split("=")
+			fn_string = fn_array[1]+"-("+fn_array[0]+")"
+		}
+
 		let fn = evaluatex(fn_string);
 		let fn1 = function(variables, fn, x){	
 			let v = Object.keys(variables);
